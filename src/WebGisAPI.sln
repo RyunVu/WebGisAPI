@@ -3,20 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGis.Core", "WebGis.Core\WebGis.Core.csproj", "{CFE50DE4-D8B1-4B38-808B-39A31A8C1E78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGis.Core", "WebGis.Core\WebGis.Core.csproj", "{CFE50DE4-D8B1-4B38-808B-39A31A8C1E78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGis.Data", "WebGis.Data\WebGis.Data.csproj", "{DAE54958-7F1E-4933-B8C7-4CF1084343FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGis.Data", "WebGis.Data\WebGis.Data.csproj", "{DAE54958-7F1E-4933-B8C7-4CF1084343FE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CFE50DE4-D8B1-4B38-808B-39A31A8C1E78} = {CFE50DE4-D8B1-4B38-808B-39A31A8C1E78}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGis.Services", "WebGis.Services\WebGis.Services.csproj", "{7F2F39FA-C51F-48E8-A009-D3F12CC207CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGis.Services", "WebGis.Services\WebGis.Services.csproj", "{7F2F39FA-C51F-48E8-A009-D3F12CC207CD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CFE50DE4-D8B1-4B38-808B-39A31A8C1E78} = {CFE50DE4-D8B1-4B38-808B-39A31A8C1E78}
 		{DAE54958-7F1E-4933-B8C7-4CF1084343FE} = {DAE54958-7F1E-4933-B8C7-4CF1084343FE}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGis.WebAPI", "WebGis.API\WebGis.WebAPI.csproj", "{AA7ED055-5A61-46D3-88F1-44E699DA5DEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGis.WebAPI", "WebGis.WebAPI\WebGis.WebAPI.csproj", "{2074270C-AA78-4CF3-BB94-6DB7DA59BF16}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7F2F39FA-C51F-48E8-A009-D3F12CC207CD} = {7F2F39FA-C51F-48E8-A009-D3F12CC207CD}
 		{CFE50DE4-D8B1-4B38-808B-39A31A8C1E78} = {CFE50DE4-D8B1-4B38-808B-39A31A8C1E78}
@@ -41,10 +41,10 @@ Global
 		{7F2F39FA-C51F-48E8-A009-D3F12CC207CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F2F39FA-C51F-48E8-A009-D3F12CC207CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F2F39FA-C51F-48E8-A009-D3F12CC207CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA7ED055-5A61-46D3-88F1-44E699DA5DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA7ED055-5A61-46D3-88F1-44E699DA5DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA7ED055-5A61-46D3-88F1-44E699DA5DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA7ED055-5A61-46D3-88F1-44E699DA5DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2074270C-AA78-4CF3-BB94-6DB7DA59BF16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2074270C-AA78-4CF3-BB94-6DB7DA59BF16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2074270C-AA78-4CF3-BB94-6DB7DA59BF16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2074270C-AA78-4CF3-BB94-6DB7DA59BF16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
