@@ -32,6 +32,12 @@ namespace WebGis.Data.Mappings
 					.HasForeignKey(p => p.PlantId)
 					.HasConstraintName("FK_Plant_PlantOutputs")
 					.OnDelete(DeleteBehavior.Cascade);
+
+			builder.HasOne(p => p.Commune)
+					.WithMany(c => c.PlantOutputs)
+					.HasForeignKey(p => p.CommuneId)
+					.HasConstraintName("FK_Commune_PlantOutputs")
+					.OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

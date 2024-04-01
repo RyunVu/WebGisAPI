@@ -1,19 +1,23 @@
+using WebGis.WebAPI.Extensions;
+using WebGis.WebAPI.Mapsters;
+using WebGis.WebAPI.Validations;
+
 var builder = WebApplication.CreateBuilder(args);
 {
-	//builder
-		//.ConfigureCors()
-		//.ConfigureNLog()
-		//.ConfigureServices()
-		//.ConfigureSwaggerOpenApi()
-		//.ConfigureMapster()
-		//.ConfigureFluentValidation();
+	builder
+		.ConfigureCors()
+		.ConfigureNLog()
+		.ConfigureServices()
+		.ConfigureSwaggerOpenApi()
+		.ConfigureMapster()
+		.ConfigureFluentValidation();
 }
 
 var app = builder.Build();
 {
-	//app.SetupRequestPipeline();
+	app.SetupRequestPipeline();
 
-	//app.UseDataSeeder();
+	app.UseDataSeeder();
 
 	if (app.Environment.IsDevelopment())
 	{

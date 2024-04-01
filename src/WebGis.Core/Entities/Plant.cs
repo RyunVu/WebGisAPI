@@ -13,7 +13,6 @@ namespace WebGis.Core.Entities
 		//*************** include object ***************
 		public Guid CategoryId { get; set; }
 		public Category Category { get; set; }
-		public IList<PlantInCommnune> PlantInCommnunes { get; set; }
 		public IList<PlantOutput> PlantOutputs { get; set; }
 	}
 }

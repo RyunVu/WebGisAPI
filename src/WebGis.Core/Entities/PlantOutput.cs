@@ -13,5 +13,8 @@ namespace WebGis.Core.Entities
 		//*************** include object ***************
 		public Guid PlantId { get; set; }
 		public Plant Plant { get; set; }
+
+		public Guid CommuneId { get; set; }
+		public Commune Commune { get; set; }
 	}
 }

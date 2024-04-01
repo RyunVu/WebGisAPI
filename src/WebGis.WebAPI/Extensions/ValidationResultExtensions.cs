@@ -47,4 +47,3 @@ namespace WebGis.WebAPI.Extensions
 		}
 	}
 }
-}

@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
 using NLog.Web;
-using System.Data;
-using System.Security.Claims;
-using System.Text;
+using Npgsql;
 using WebGis.Data.Contexts;
+using WebGis.Data.Seeders;
 
 namespace WebGis.WebAPI.Extensions
 {
@@ -20,9 +14,18 @@ namespace WebGis.WebAPI.Extensions
 
 			builder.Services.AddMemoryCache();
 
+			var connectionString = builder.Configuration.GetConnectionString("LacDuongDb");
+			var dataSource = new NpgsqlConnectionStringBuilder(connectionString)
+			{
+				ApplicationName = builder.Environment.ApplicationName,
+				Pooling = true,
+				TrustServerCertificate = true
+			}.ConnectionString;
+
+			// Register the DbContext
 			builder.Services.AddDbContext<WebDbContext>(options =>
-			options.UseNpgsql(
-				builder.Configuration.GetConnectionString("LacDuongDb")));
+				options.UseNpgsql(dataSource, o => o.UseNetTopologySuite()));
+
 
 			builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 
@@ -54,20 +57,21 @@ namespace WebGis.WebAPI.Extensions
 			return builder;
 		}
 
-
 		public static IApplicationBuilder UseDataSeeder(
 			this IApplicationBuilder app)
 		{
 			using var scope = app.ApplicationServices.CreateScope();
-
 			try
 			{
-				scope.ServiceProvider.GetRequiredService<IDataSeeder>().Initialize();
+				scope.ServiceProvider
+					.GetRequiredService<IDataSeeder>()
+					.Initialize();
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				scope.ServiceProvider.GetRequiredService<ILogger<Program>>()
-					.LogError(e, "Count not insert data into database");
+				scope.ServiceProvider
+								.GetRequiredService<ILogger<Program>>()
+								.LogError(ex, "Could not insert data into database");
 			}
 
 			return app;
@@ -96,9 +100,6 @@ namespace WebGis.WebAPI.Extensions
 
 			app.UseStaticFiles();
 			app.UseHttpsRedirection();
-
-			app.UseAuthentication();
-			app.UseAuthorization();
 
 			app.UseCors("WebGisApp");
 
