@@ -272,359 +272,367 @@ namespace WebGis.Data.Seeders
 		{
 			var plantOutputs = new List<PlantOutput>()
 			{
-				// ****************** For TT. Lạc Dương - 0 ****************** 
+			// ****************** For TT. Lạc Dương - 0 ****************** 
 				
-				#region tt-lac-duong-dau
+			#region tt-lac-duong-dau
 
-				new PlantOutput
-				{
-					Quantity = 2000,
-					UrlSlug = "tt-lac-duong-dau",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[0],
-					Commune = communes[0],
-				},
-				new PlantOutput
-				{
-					Quantity = 3000,
-					UrlSlug = "tt-lac-duong-dau",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[0],
-					Commune = communes[0],
-				},
-				new PlantOutput
-				{
-					Quantity = 2500,
-					UrlSlug = "tt-lac-duong-dau",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[0],
-					Commune = communes[0],
-				},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[0],
+				Quantity = 2000,
+				UrlSlug = "tt-lac-duong-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[0],
+				Quantity = 3000,
+				UrlSlug = "tt-lac-duong-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[0],
+				Quantity = 2500,
+				UrlSlug = "tt-lac-duong-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				#endregion
+			#endregion
 
-				#region tt-lac-duong-coffee
+			#region tt-lac-duong-coffee
 
-				new PlantOutput
-				{
-					Quantity = 2000,
-					UrlSlug = "tt-lac-duong-coffee",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[3],
-					Commune = communes[0],
-				},
-				new PlantOutput
-				{
-					Quantity = 3000,
-					UrlSlug = "tt-lac-duong-coffee",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[3],
-					Commune = communes[0],
-				},
-				new PlantOutput
-				{
-					Quantity = 2500,
-					UrlSlug = "tt-lac-duong-coffee",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[3],
-					Commune = communes[0],
-				},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[0],
+				Quantity = 2000,
+				UrlSlug = "tt-lac-duong-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[0],
+				Quantity = 3000,
+				UrlSlug = "tt-lac-duong-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[0],
+				Quantity = 2500,
+				UrlSlug = "tt-lac-duong-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				#endregion
+			#endregion
 
-				// ******************    For Đạ Chais - 1   ****************** 
-				
-				#region da-chais-dau
 
-				new PlantOutput
-				{
-					Quantity = 600,
-					UrlSlug = "da-chais-dau",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[0],
-					Commune = communes[1],
-				},
-				new PlantOutput
-				{
-					Quantity = 500,
-					UrlSlug = "da-chais-dau",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[0],
-					Commune = communes[1],
-				},
-				new PlantOutput
-				{
-					Quantity = 200,
-					UrlSlug = "da-chais-dau",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[0],
-					Commune = communes[1],
-				},
+			// ******************    For Đạ Chais - 1   ****************** 
 
-				#endregion
+			#region da-chais-dau
 
-				#region da-chais-coffee
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[1],
+				Quantity = 600,
+				UrlSlug = "da-chais-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[1],
+				Quantity = 500,
+				UrlSlug = "da-chais-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[1],
+				Quantity = 200,
+				UrlSlug = "da-chais-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				new PlantOutput
-				{
-					Quantity = 1000,
-					UrlSlug = "da-chais-coffee",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[3],
-					Commune = communes[1],
-				},
-				new PlantOutput
-				{
-					Quantity = 1200,
-					UrlSlug = "da-chais-coffee",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[3],
-					Commune = communes[1],
-				},
-				new PlantOutput
-				{
-					Quantity = 800,
-					UrlSlug = "da-chais-coffee",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[3],
-					Commune = communes[1],
-				},
+			#endregion
 
-				#endregion
+			#region da-chais-coffee
 
-				// ******************    For Đạ Nhim - 2    ****************** 
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[1],
+				Quantity = 1000,
+				UrlSlug = "da-chais-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[1],
+				Quantity = 1200,
+				UrlSlug = "da-chais-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[1],
+				Quantity = 800,
+				UrlSlug = "da-chais-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				#region da-nhim-dau
+			#endregion
 
-				new PlantOutput
-				{
-					Quantity = 888,
-					UrlSlug = "da-nhim-dau",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[0],
-					Commune = communes[2],
-				},
-				new PlantOutput
-				{
-					Quantity = 888,
-					UrlSlug = "da-nhim-dau",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[0],
-					Commune = communes[2],
-				},
-				new PlantOutput
-				{
-					Quantity = 888,
-					UrlSlug = "da-nhim-dau",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[0],
-					Commune = communes[2],
-				},
+			// ******************    For Đạ Nhim - 2    ****************** 
 
-				#endregion
+			#region da-nhim-dau
 
-				#region da-nhim-coffee
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[2],
+				Quantity = 888,
+				UrlSlug = "da-nhim-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[2],
+				Quantity = 888,
+				UrlSlug = "da-nhim-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[2],
+				Quantity = 888,
+				UrlSlug = "da-nhim-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				new PlantOutput
-				{
-					Quantity = 666,
-					UrlSlug = "da-nhim-coffee",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[3],
-					Commune = communes[2],
-				},
-				new PlantOutput
-				{
-					Quantity = 666,
-					UrlSlug = "da-nhim-coffee",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[3],
-					Commune = communes[2],
-				},
-				new PlantOutput
-				{
-					Quantity = 666,
-					UrlSlug = "da-nhim-coffee",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[3],
-					Commune = communes[2],
-				},
+			#endregion
 
-				#endregion
+			#region da-nhim-coffee
 
-				// ******************    For Đạ Sar - 3     ****************** 
-				
-				#region da-sar-dau
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[2],
+				Quantity = 666,
+				UrlSlug = "da-nhim-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[2],
+				Quantity = 666,
+				UrlSlug = "da-nhim-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[2],
+				Quantity = 666,
+				UrlSlug = "da-nhim-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				new PlantOutput
-				{
-					Quantity = 777,
-					UrlSlug = "da-sar-dau",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[0]
-				},
-				new PlantOutput
-				{
-					Quantity = 777,
-					UrlSlug = "da-sar-dau",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[0]
-				},
-				new PlantOutput
-				{
-					Quantity = 777,
-					UrlSlug = "da-sar-dau",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[0]
-				},
+			#endregion
 
-				#endregion
+			// ******************    For Đạ Sar - 3     ****************** 
 
-				#region da-sar-coffee
+			#region da-sar-dau
 
-				new PlantOutput
-				{
-					Quantity = 999,
-					UrlSlug = "da-sar-coffee",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[3]
-				},
-				new PlantOutput
-				{
-					Quantity = 999,
-					UrlSlug = "da-sar-coffee",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[3]
-				},
-				new PlantOutput
-				{
-					Quantity = 999,
-					UrlSlug = "da-sar-coffee",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[3]
-				},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[3],
+				Quantity = 777,
+				UrlSlug = "da-sar-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[3],
+				Quantity = 777,
+				UrlSlug = "da-sar-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[3],
+				Quantity = 777,
+				UrlSlug = "da-sar-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				#endregion
+			#endregion
 
-				// ******************   For Đưng K'Nớ - 4   ****************** 
-				
-				#region dung-kno-dau
+			#region da-sar-coffee
 
-				new PlantOutput
-				{
-					Quantity = 232,
-					UrlSlug = "dung-kno-dau",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[0],
-					Commune = communes[4],
-				},
-				new PlantOutput
-				{
-					Quantity = 232,
-					UrlSlug = "dung-kno-dau",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[0],
-					Commune = communes[4],
-				},
-				new PlantOutput
-				{
-					Quantity = 232,
-					UrlSlug = "dung-kno-dau",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[0],
-					Commune = communes[4],
-				},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[3],
+				Quantity = 999,
+				UrlSlug = "da-sar-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[3],
+				Quantity = 999,
+				UrlSlug = "da-sar-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[3],
+				Quantity = 999,
+				UrlSlug = "da-sar-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				#endregion
+			#endregion
 
-				#region dung-kno-coffee
+			// ******************   For Đưng K'Nớ - 4   ****************** 
 
-				new PlantOutput
-				{
-					Quantity = 678,
-					UrlSlug = "dung-kno-coffee",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[3],
-					Commune = communes[4],
-				},
-				new PlantOutput
-				{
-					Quantity = 678,
-					UrlSlug = "dung-kno-coffee",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[3],
-					Commune = communes[4],
-				},
-				new PlantOutput
-				{
-					Quantity = 678,
-					UrlSlug = "dung-kno-coffee",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[3],
-					Commune = communes[4],
-				},
+			#region dung-kno-dau
 
-				#endregion
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[4],
+				Quantity = 232,
+				UrlSlug = "dung-kno-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[4],
+				Quantity = 232,
+				UrlSlug = "dung-kno-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[4],
+				Quantity = 232,
+				UrlSlug = "dung-kno-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				// ******************     For Xã Lát - 5    ****************** 
-				
-				#region xa-lat-dau
+			#endregion
 
-				new PlantOutput
-				{
-					Quantity = 456,
-					UrlSlug = "xa-lat-dau",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[0],
-					Commune = communes[5],
-				},
-				new PlantOutput
-				{
-					Quantity = 456,
-					UrlSlug = "xa-lat-dau",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[0],
-					Commune = communes[5],
-				},
-				new PlantOutput
-				{
-					Quantity = 456,
-					UrlSlug = "xa-lat-dau",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[0],
-					Commune = communes[5],
-				},
+			#region dung-kno-coffee
 
-				#endregion
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[4],
+				Quantity = 678,
+				UrlSlug = "dung-kno-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[4],
+				Quantity = 678,
+				UrlSlug = "dung-kno-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[4],
+				Quantity = 678,
+				UrlSlug = "dung-kno-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
 
-				#region xa-lat-coffee
+			#endregion
 
-				new PlantOutput
-				{
-					Quantity = 987,
-					UrlSlug = "xa-lat-coffee",
-					Time = new DateTime(2024, 1, 31),
-					Plant = plants[3],
-					Commune = communes[5],
-				},
-				new PlantOutput
-				{
-					Quantity = 987,
-					UrlSlug = "xa-lat-coffee",
-					Time = new DateTime(2024, 2, 31),
-					Plant = plants[3],
-					Commune = communes[5],
-				},
-				new PlantOutput
-				{
-					Quantity = 987,
-					UrlSlug = "xa-lat-coffee",
-					Time = new DateTime(2024, 3, 31),
-					Plant = plants[3],
-					Commune = communes[5],
-				},
+			// ******************     For Xã Lát - 5    ****************** 
 
-				#endregion
+			#region xa-lat-dau
+
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[5],
+				Quantity = 456,
+				UrlSlug = "xa-lat-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[5],
+				Quantity = 456,
+				UrlSlug = "xa-lat-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[0],
+				Commune = communes[5],
+				Quantity = 456,
+				UrlSlug = "xa-lat-dau",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
+
+			#endregion
+
+			#region xa-lat-coffee
+
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[5],
+				Quantity = 987,
+				UrlSlug = "xa-lat-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 1, 31), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[5],
+				Quantity = 987,
+				UrlSlug = "xa-lat-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 2, 29), DateTimeKind.Utc),
+			},
+			new PlantOutput
+			{
+				Plant = plants[3],
+				Commune = communes[5],
+				Quantity = 987,
+				UrlSlug = "xa-lat-coffee",
+				Time = DateTime.SpecifyKind(new DateTime(2024, 3, 31), DateTimeKind.Utc),
+			},
+
+			#endregion
+
 			};
 
 			var plantOutputsToAdd = new List<PlantOutput>();

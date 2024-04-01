@@ -7,7 +7,13 @@ namespace WebGis.Core.Entities
 		public Guid Id { get; set; }
 		public int Quantity { get; set; }
 		public string UrlSlug { get; set; }
-		public DateTime Time { get; set; }
+
+		private DateTime _time;
+		public DateTime Time
+		{
+			get => _time;
+			set => _time = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+		}
 		public bool Actived { get; set; }
 
 		//*************** include object ***************

@@ -21,7 +21,8 @@ namespace WebGis.Data.Mappings
 					.HasMaxLength(100);
 
 			builder.Property(a => a.Time)
-					.HasColumnType("datetime");
+							  .HasColumnType("datetime2")  
+							  .IsRequired();
 
 			builder.Property(a => a.Actived)
 					.IsRequired()
@@ -33,9 +34,9 @@ namespace WebGis.Data.Mappings
 					.HasConstraintName("FK_Plant_PlantOutputs")
 					.OnDelete(DeleteBehavior.Cascade);
 
-			builder.HasOne(p => p.Commune)
-					.WithMany(c => c.PlantOutputs)
-					.HasForeignKey(p => p.CommuneId)
+			builder.HasOne(c => c.Commune)
+					.WithMany(o => o.PlantOutputs)
+					.HasForeignKey(c => c.CommuneId)
 					.HasConstraintName("FK_Commune_PlantOutputs")
 					.OnDelete(DeleteBehavior.Cascade);
 		}
