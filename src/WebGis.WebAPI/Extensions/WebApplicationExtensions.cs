@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Carter;
+using Microsoft.EntityFrameworkCore;
 using NLog.Web;
 using Npgsql;
 using WebGis.Data.Contexts;
 using WebGis.Data.Seeders;
+using WebGis.Services.Gis;
 
 namespace WebGis.WebAPI.Extensions
 {
@@ -22,12 +24,18 @@ namespace WebGis.WebAPI.Extensions
 				TrustServerCertificate = true
 			}.ConnectionString;
 
+
+			builder.Services.AddCarter();
+			builder.Services.AddMemoryCache();
+
 			// Register the DbContext
 			builder.Services.AddDbContext<WebDbContext>(options =>
 				options.UseNpgsql(dataSource, o => o.UseNetTopologySuite()));
 
 
 			builder.Services.AddScoped<IDataSeeder, DataSeeder>();
+			builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
+			builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 
 			return builder;
