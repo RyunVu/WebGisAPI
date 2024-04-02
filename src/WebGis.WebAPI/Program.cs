@@ -1,3 +1,4 @@
+using Carter;
 using WebGis.WebAPI.Extensions;
 using WebGis.WebAPI.Mapsters;
 using WebGis.WebAPI.Validations;
@@ -17,24 +18,9 @@ var app = builder.Build();
 {
 	app.SetupRequestPipeline();
 
+	app.MapCarter();
+
 	app.UseDataSeeder();
-
-	if (app.Environment.IsDevelopment())
-	{
-		app.UseSwagger();
-		app.UseSwaggerUI();
-	}
-
-	app.UseStaticFiles();
-
-	app.UseHttpsRedirection();
-
-	app.UseCors("");
-
-	//app.MapProductEndpoints();
-	//app.MapAccountEndPoints();
-	//app.MapCategoryEndpoints();
-	//app.MapUnitEndpoints();
 
 
 	app.Run();
