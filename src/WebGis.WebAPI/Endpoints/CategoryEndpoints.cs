@@ -54,14 +54,14 @@ namespace WebGis.WebAPI.Endpoints
 			ICategoryRepository CategoryRepo,
 			IMapper mapper)
 		{
-			var CategoryQuery = mapper.Map<CategoryQuery>(model);
-			var Categorys = await CategoryRepo
+			var categoryQuery = mapper.Map<CategoryQuery>(model);
+			var categories = await CategoryRepo
 				.GetPagedCategoryAsync(
-					CategoryQuery, model,
-					Category => Category.ProjectToType<CategoryDto>());
+					categoryQuery, model,
+					category => category.ProjectToType<CategoryDto>());
 
 			var paginationResult = new
-				PaginationResult<CategoryDto>(Categorys);
+				PaginationResult<CategoryDto>(categories);
 
 			return Results.Ok(ApiResponse.Success(paginationResult));
 		}
@@ -71,12 +71,12 @@ namespace WebGis.WebAPI.Endpoints
 				ICategoryRepository CategoryRepo,
 				IMapper mapper)
 		{
-			var Category = await CategoryRepo.GetCategoryByIdAsync(id, true);
+			var category = await CategoryRepo.GetCategoryByIdAsync(id, true);
 
-			var CategoryDetail = mapper.Map<CategoryDto>(Category);
+			var categoryDetail = mapper.Map<CategoryDto>(category);
 
-			return CategoryDetail != null
-							? Results.Ok(ApiResponse.Success(CategoryDetail))
+			return categoryDetail != null
+							? Results.Ok(ApiResponse.Success(categoryDetail))
 							: Results.Ok(ApiResponse.Fail(
 									HttpStatusCode.NotFound,
 									$"Không tìm thấy phân loại với id: `{id}`"));
