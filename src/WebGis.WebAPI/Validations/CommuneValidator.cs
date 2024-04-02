@@ -21,7 +21,24 @@ namespace WebGis.WebAPI.Validations
 				.NotEmpty()
 				.WithMessage("Area is not empty");
 
-
+			RuleFor(x => x.DistrictId)
+				.NotEmpty()
+				.Must(TryParseGuid);
+		
 		}
-    }
+		public static bool TryParseGuid(Guid guidString)
+		{
+			if (guidString != Guid.Empty)
+			{
+				if (Guid.TryParse(guidString.ToString(), out _))
+				{
+					return true;
+				}
+				else
+					return false;
+			}
+
+			return false;
+		}
+	}
 }
