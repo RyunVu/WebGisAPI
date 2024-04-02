@@ -16,99 +16,100 @@ namespace WebGis.Services.Gis
 			_dbContext = dbContext;
 		}
 
-		private IQueryable<Plant> FilterPlant(
-			PlantQuery query)
+		private IQueryable<PlantOutput> FilterPlantOutput(
+			PlantOutputQuery query)
 		{
-			return _dbContext.Set<Plant>()
+			return _dbContext.Set<PlantOutput>()
 				.WhereIf(!string.IsNullOrEmpty(query.Keyword),
-				a => a.Name.Contains(query.Keyword));
+				a => a.Plant.Name.Contains(query.Keyword) &&
+				a.Commune.Name.Contains(query.Keyword));
 		}
 
 
-		public async Task<IPagedList<T>> GetPagedPlantAsync<T>(
-			PlantQuery query,
+		public async Task<IPagedList<T>> GetPagedPlantOutputAsync<T>(
+			PlantOutputQuery query,
 			IPagingParams pagingParams,
-			Func<IQueryable<Plant>, IQueryable<T>> mapper,
+			Func<IQueryable<PlantOutput>, IQueryable<T>> mapper,
 			CancellationToken cancellationToken = default)
 		{
-			var plants = FilterPlant(query);
-			return await mapper(plants)
+			var PlantOutputs = FilterPlantOutput(query);
+			return await mapper(PlantOutputs)
 				.ToPagedListAsync(pagingParams, cancellationToken);
 		}
 
-		public async Task<IList<Plant>> GetPlantsAsync(
+		public async Task<IList<PlantOutput>> GetPlantOutputsAsync(
 			CancellationToken cancellationToken = default)
 		{
-			return await _dbContext.Set<Plant>()
-				.OrderBy(n => n.Name)
+			return await _dbContext.Set<PlantOutput>()
+				.OrderBy(n => n.Quantity)
 				.ToListAsync(cancellationToken);
 		}
 
-		public async Task<Plant> GetPlantByIdAsync(
+		public async Task<PlantOutput> GetPlantOutputByIdAsync(
 			Guid id,
 			bool includeDetail = false,
 			CancellationToken cancellationToken = default)
 		{
 			if (includeDetail)
 			{
-				return await _dbContext.Set<Plant>()
+				return await _dbContext.Set<PlantOutput>()
 					.Where(d => d.Id.Equals(id))
 					.FirstOrDefaultAsync(cancellationToken);
 			}
 
-			return await _dbContext.Set<Plant>()
+			return await _dbContext.Set<PlantOutput>()
 				.FindAsync(id, cancellationToken);
 		}
 
-		public async Task<Plant> GetPlantBySlugAsync(
+		public async Task<PlantOutput> GetPlantOutputBySlugAsync(
 			string slug,
 			CancellationToken cancellationToken = default)
 		{
-			return await _dbContext.Set<Plant>()
+			return await _dbContext.Set<PlantOutput>()
 						.Where(a => a.UrlSlug.Equals(slug))
 						.FirstOrDefaultAsync(cancellationToken);
 		}
 
-		public async Task<bool> IsPlantIdExistedAsync(
+		public async Task<bool> IsPlantOutputIdExistedAsync(
 			Guid id,
 			CancellationToken cancellationToken = default)
 		{
-			return await _dbContext.Set<Plant>()
+			return await _dbContext.Set<PlantOutput>()
 				.AnyAsync(x => x.Id.Equals(id), cancellationToken);
 		}
 
-		public async Task<bool> IsPlantSlugExistedAsync(
+		public async Task<bool> IsPlantOutputSlugExistedAsync(
 			Guid id,
 			string slug,
 			CancellationToken cancellationToken = default)
 		{
-			return await _dbContext.Set<Plant>()
+			return await _dbContext.Set<PlantOutput>()
 				.AnyAsync(a => a.Id != id
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
-		public async Task<bool> AddOrUpdatePlantAsync(
-			Plant plant,
+		public async Task<bool> AddOrUpdatePlantOutputAsync(
+			PlantOutput plantOutput,
 			CancellationToken cancellationToken = default)
 		{
-			if (plant.Id != Guid.Empty)
+			if (plantOutput.Id != Guid.Empty)
 			{
-				_dbContext.Set<Plant>().Update(plant);
+				_dbContext.Set<PlantOutput>().Update(plantOutput);
 			}
 			else
 			{
-				_dbContext.Set<Plant>().Add(plant);
+				_dbContext.Set<PlantOutput>().Add(plantOutput);
 			}
 
 			return await _dbContext
 				.SaveChangesAsync(cancellationToken) > 0;
 		}
 
-		public async Task<bool> DeletePlantByIdAsync(
+		public async Task<bool> DeletePlantOutputByIdAsync(
 			Guid id,
 			CancellationToken cancellationToken = default)
 		{
-			return await _dbContext.Set<Plant>()
+			return await _dbContext.Set<PlantOutput>()
 				.Where(c => c.Id.Equals(id))
 				.ExecuteDeleteAsync(cancellationToken) > 0;
 		}

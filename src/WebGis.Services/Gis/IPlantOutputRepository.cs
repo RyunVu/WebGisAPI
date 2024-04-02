@@ -6,37 +6,37 @@ namespace WebGis.Services.Gis
 {
 	public interface IPlantOutputRepository
 	{
-		Task<IPagedList<T>> GetPagedPlantAsync<T>(
-		PlantQuery query,
+		Task<IPagedList<T>> GetPagedPlantOutputAsync<T>(
+		PlantOutputQuery query,
 		IPagingParams pagingParams,
-		Func<IQueryable<Plant>, IQueryable<T>> mapper,
+		Func<IQueryable<PlantOutput>, IQueryable<T>> mapper,
 		CancellationToken cancellationToken = default);
 
-		Task<IList<Plant>> GetPlantsAsync(
+		Task<IList<PlantOutput>> GetPlantOutputsAsync(
 			CancellationToken cancellationToken = default);
-		Task<Plant> GetPlantByIdAsync(
+		Task<PlantOutput> GetPlantOutputByIdAsync(
 			Guid id,
 			bool includeDetail = false,
 			CancellationToken cancellationToken = default);
 
-		Task<Plant> GetPlantBySlugAsync(
+		Task<PlantOutput> GetPlantOutputBySlugAsync(
 			string slug,
 			CancellationToken cancellationToken = default);
 
-		Task<bool> IsPlantIdExistedAsync(
+		Task<bool> IsPlantOutputIdExistedAsync(
 			Guid id,
 			CancellationToken cancellationToken = default);
 
-		Task<bool> IsPlantSlugExistedAsync(
+		Task<bool> IsPlantOutputSlugExistedAsync(
 			Guid id,
 			string slug,
 			CancellationToken cancellationToken = default);
 
-		Task<bool> AddOrUpdatePlantAsync(
-			Plant plant,
+		Task<bool> AddOrUpdatePlantOutputAsync(
+			PlantOutput PlantOutput,
 			CancellationToken cancellationToken = default);
 
-		Task<bool> DeletePlantByIdAsync(
+		Task<bool> DeletePlantOutputByIdAsync(
 			Guid id,
 			CancellationToken cancellationToken = default);
 	}
