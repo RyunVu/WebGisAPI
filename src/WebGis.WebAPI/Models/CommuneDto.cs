@@ -1,4 +1,6 @@
-﻿namespace WebGis.WebAPI.Models
+﻿using WebGis.Core.Dto;
+
+namespace WebGis.WebAPI.Models
 {
 	public class CommuneDto
 	{
@@ -7,6 +9,6 @@
 		public string UrlSlug { get; set; }
 		public float Area { get; set; }
 		public bool Actived { get; set; }
-		public DistrictDto District { get; set; }
+		public DistrictItem District { get; set; }
 	}
 }
