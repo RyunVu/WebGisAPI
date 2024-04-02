@@ -37,6 +37,7 @@ namespace WebGis.WebAPI.Extensions
 			builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
 			builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 			builder.Services.AddScoped<ICommuneRepository, CommuneRepository>();
+			builder.Services.AddScoped<IPlantRepository, PlantRepository>();
 
 
 
