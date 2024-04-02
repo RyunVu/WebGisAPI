@@ -15,13 +15,7 @@ namespace WebGis.WebAPI.Validations
 
 			RuleFor(c => c.Description)
 				.NotEmpty()
-				.WithMessage("Phần giới thiệu không được để trống");
-
-			RuleFor(c => c.UrlSlug)
-				.NotEmpty()
-				.WithMessage("UrlSlug không được để trống")
-				.MaximumLength(128)
-				.WithMessage("UrlSlug tối đa 128 ký tự");
+				.MaximumLength(5000);
 		}
     }
 }

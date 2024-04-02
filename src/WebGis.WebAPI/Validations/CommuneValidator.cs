@@ -3,9 +3,9 @@ using WebGis.WebAPI.Models;
 
 namespace WebGis.WebAPI.Validations
 {
-	public class DistrictValidator : AbstractValidator<DistrictEditModel>
+	public class CommuneValidator : AbstractValidator<CommuneEditModel>
 	{
-        public DistrictValidator()
+        public CommuneValidator()
         {
 			RuleFor(c => c.Name)
 				.NotEmpty()
@@ -16,6 +16,12 @@ namespace WebGis.WebAPI.Validations
 			RuleFor(c => c.Description)
 				.NotEmpty()
 				.MaximumLength(5000);
+
+			RuleFor(x => x.Area)
+				.NotEmpty()
+				.WithMessage("Area is not empty");
+
+
 		}
     }
 }

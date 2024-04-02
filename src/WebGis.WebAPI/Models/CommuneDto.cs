@@ -6,5 +6,7 @@
 		public string Name { get; set; }
 		public string UrlSlug { get; set; }
 		public float Area { get; set; }
+		public bool Actived { get; set; }
+		public DistrictDto District { get; set; }
 	}
 }
