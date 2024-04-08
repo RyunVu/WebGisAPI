@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using NLog.Web;
 using Npgsql;
+using System.Text.Json.Serialization;
 using WebGis.Data.Contexts;
 using WebGis.Data.Seeders;
 using WebGis.Services.Gis;
+using Microsoft.Extensions.Options;
 
 namespace WebGis.WebAPI.Extensions
 {
@@ -99,6 +101,16 @@ namespace WebGis.WebAPI.Extensions
 			return builder;
 		}
 
+		public static WebApplicationBuilder ConfigureJsonSerializer(
+			this WebApplicationBuilder builder)
+		{
+			builder.Services.AddMvc().AddJsonOptions(options =>
+			{
+				options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
+			});
+
+			return builder;
+		}
 
 		public static WebApplication SetupRequestPipeline(
 			this WebApplication app)

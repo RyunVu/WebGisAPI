@@ -11,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 		.ConfigureServices()
 		.ConfigureSwaggerOpenApi()
 		.ConfigureMapster()
-		.ConfigureFluentValidation();
+		.ConfigureFluentValidation()
+		.ConfigureJsonSerializer();
 }
 
 var app = builder.Build();
