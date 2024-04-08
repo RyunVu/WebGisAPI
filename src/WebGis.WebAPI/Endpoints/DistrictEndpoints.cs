@@ -40,7 +40,7 @@ namespace WebGis.WebAPI.Endpoints
 				.Produces(400)
 				.Produces(409);
 
-			routeGroupBuilder.MapPut("/{id:int}", UpdateDistrict)
+			routeGroupBuilder.MapPut("/{id:Guid}", UpdateDistrict)
 				.WithName("UpdateADistrict")
 				.AddEndpointFilter<ValidatorFilter<DistrictEditModel>>()
 				.Produces(204)
@@ -120,11 +120,11 @@ namespace WebGis.WebAPI.Endpoints
 
 			return result
 				? Results.Ok(
-					ApiResponse.Fail(
-						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"))
-				: Results.Ok(
 					ApiResponse.Success(
-						"Thêm thành công", HttpStatusCode.Created));
+						"Thêm thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 		}
 
 		#endregion
@@ -149,11 +149,11 @@ namespace WebGis.WebAPI.Endpoints
 
 			return await districtRepo.AddOrUpdateDistrictAsync(district)
 				? Results.Ok(
-					ApiResponse.Fail(
-						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"))
-				: Results.Ok(
 					ApiResponse.Success(
-						"Thêm thành công", HttpStatusCode.Created));
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 
 		} 
 

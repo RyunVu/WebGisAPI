@@ -118,11 +118,11 @@ namespace WebGis.WebAPI.Endpoints
 
 			return result
 				? Results.Ok(
-					ApiResponse.Fail(
-						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"))
-				: Results.Ok(
 					ApiResponse.Success(
-						"Thêm thành công", HttpStatusCode.Created));
+						"Thêm thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 		}
 
 		#endregion
@@ -147,11 +147,11 @@ namespace WebGis.WebAPI.Endpoints
 
 			return await plantRepo.AddOrUpdatePlantAsync(plant)
 				? Results.Ok(
-					ApiResponse.Fail(
-						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"))
-				: Results.Ok(
 					ApiResponse.Success(
-						"Thêm thành công", HttpStatusCode.Created));
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 
 		}
 

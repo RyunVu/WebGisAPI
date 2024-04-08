@@ -22,5 +22,6 @@ namespace WebGis.Core.Entities
 
 		public Guid CommuneId { get; set; }
 		public Commune Commune { get; set; }
+
 	}
 }

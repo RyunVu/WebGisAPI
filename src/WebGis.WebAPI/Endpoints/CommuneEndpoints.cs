@@ -40,7 +40,7 @@ namespace WebGis.WebAPI.Endpoints
 				.Produces(400)
 				.Produces(409);
 
-			routeGroupBuilder.MapPut("/{id:int}", UpdateCommune)
+			routeGroupBuilder.MapPut("/{id:Guid}", UpdateCommune)
 				.WithName("UpdateACommune")
 				.AddEndpointFilter<ValidatorFilter<CommuneEditModel>>()
 				.Produces(204)
@@ -113,17 +113,17 @@ namespace WebGis.WebAPI.Endpoints
 			}
 
 			var commune = mapper.Map<Commune>(model);
-			commune.UrlSlug = slug;
+			commune.UrlSlug = slug;	
 			var result = await communeRepo.AddOrUpdateCommuneAsync(commune);
 
 
 			return result
 				? Results.Ok(
-					ApiResponse.Fail(
-						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"))
-				: Results.Ok(
 					ApiResponse.Success(
-						"Thêm thành công", HttpStatusCode.Created));
+						"Thêm thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 		}
 
 		#endregion
@@ -148,11 +148,11 @@ namespace WebGis.WebAPI.Endpoints
 
 			return await communeRepo.AddOrUpdateCommuneAsync(commune)
 				? Results.Ok(
-					ApiResponse.Fail(
-						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"))
-				: Results.Ok(
 					ApiResponse.Success(
-						"Thêm thành công", HttpStatusCode.Created));
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 
 		}
 

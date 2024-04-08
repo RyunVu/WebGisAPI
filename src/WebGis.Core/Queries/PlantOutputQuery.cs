@@ -1,6 +1,6 @@
 ﻿namespace WebGis.Core.Queries
 {
-	public class PlantOutput
+	public class PlantOutputQuery
 	{
 		public string Keyword { get; set; }
 

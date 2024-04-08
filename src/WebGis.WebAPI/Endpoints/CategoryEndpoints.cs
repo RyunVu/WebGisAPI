@@ -2,6 +2,7 @@
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System.Net;
 using WebGis.Core.Collections;
 using WebGis.Core.Entities;
@@ -35,16 +36,18 @@ namespace WebGis.WebAPI.Endpoints
 			routeGroupBuilder.MapPost("/", AddCategory)
 				.WithName("AddNewCategory")
 				.AddEndpointFilter<ValidatorFilter<CategoryEditModel>>()
-				.Produces(201)
-				.Produces(400)
-				.Produces(409);
+				.Produces<ApiResponse<CategoryDto>>();
 
-			routeGroupBuilder.MapPut("/{id:int}", UpdateCategory)
+			routeGroupBuilder.MapPut("/{id:Guid}", UpdateCategory)
 				.WithName("UpdateACategory")
 				.AddEndpointFilter<ValidatorFilter<CategoryEditModel>>()
-				.Produces(204)
-				.Produces(400)
-				.Produces(409);
+				.Produces<ApiResponse<string>>();
+
+
+			routeGroupBuilder.MapDelete("/{id:Guid}", DeleteCategory)
+				.WithName("DeleteACategory")
+				.Produces<ApiResponse<string>>();
+
 
 		}
 
@@ -119,11 +122,11 @@ namespace WebGis.WebAPI.Endpoints
 
 			return result
 				? Results.Ok(
-					ApiResponse.Fail(
-						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"))
-				: Results.Ok(
 					ApiResponse.Success(
-						"Thêm thành công", HttpStatusCode.Created));
+						"Thêm thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 		}
 
 		#endregion
@@ -148,15 +151,23 @@ namespace WebGis.WebAPI.Endpoints
 
 			return await CategoryRepo.AddOrUpdateCategoryAsync(Category)
 				? Results.Ok(
-					ApiResponse.Fail(
-						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"))
-				: Results.Ok(
 					ApiResponse.Success(
-						"Thêm thành công", HttpStatusCode.Created));
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 
 		}
 
 		#endregion
+
+		private static async Task<IResult> DeleteCategory(Guid id,
+		   ICategoryRepository categoryRepo)
+		{
+			return await categoryRepo.DeleteCategoryByIdAsync(id)
+					? Results.Ok(ApiResponse.Success("Chủ đề đã được xóa", HttpStatusCode.NoContent))
+					: Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy chủ đề với id: `{id}`"));
+		}
 
 
 	}

@@ -1,8 +1,12 @@
-﻿namespace WebGis.WebAPI.Models
+﻿using Microsoft.EntityFrameworkCore;
+using WebGis.Core.Entities;
+
+namespace WebGis.WebAPI.Models
 {
 	public class PlantOutputEditModel
 	{
 		public int Quantity { get; set; }
+
 		public string UrlSlug { get; set; }
 
 		private DateTime _time;
@@ -14,5 +18,6 @@
 
 		public Guid CommuneId { get; set; }
 		public Guid PlantId { get; set; }
+
 	}
 }
