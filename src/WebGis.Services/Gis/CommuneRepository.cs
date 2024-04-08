@@ -32,8 +32,8 @@ namespace WebGis.Services.Gis
 			Func<IQueryable<Commune>, IQueryable<T>> mapper,
 			CancellationToken cancellationToken = default)
 		{
-			var categories = FilterCommune(query);
-			return await mapper(categories)
+			var communes = FilterCommune(query);
+			return await mapper(communes)
 				.ToPagedListAsync(pagingParams, cancellationToken);
 		}
 
