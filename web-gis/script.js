@@ -1,8 +1,8 @@
 // ====================================== OVERLAYS ======================================
 
 var mapView = new ol.View({
-  center: ol.proj.fromLonLat([106.774141, 15.757886]),
-  zoom: 5,
+  center: ol.proj.fromLonLat([108.507234, 11.996331]),
+  zoom: 6,
 });
 
 var map = new ol.Map({
@@ -31,37 +31,70 @@ var baseGroup = new ol.layer.Group({
 
 map.addLayer(baseGroup);
 
-fetch('https://your-api-url/data')
+var LacDuongVectorSource = new ol.source.Vector();
+fetch('http://localhost:5000/api/commune')
   .then(response => response.json())
   .then(data => {
-    // Create a vector source and layer from the fetched GeoJSON data
-    var LacDuongVectorSource  = new ol.source.Vector({
-      features: new ol.format.GeoJSON().readFeatures(data, {
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857',
-      }),
-    });
+    console.log(data); // Log the fetched data to check its structure
 
-    var vectorLayer = new ol.layer.Vector({
-      source: vectorSource,
-      title: 'Fetched Data', // Set a title for the layer
-    });
+    if (data && data.result && Array.isArray(data.result.items)) {
+      // Filter out features with undefined geometry
+      var features = data.result.items.filter(item => item.geometry).map(item => {
+        var feature = new ol.Feature({
+          geometry: new ol.format.WKT().readGeometry(item.geometry, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857',
+          }),
+          name: item.name,
+          description: item.description,
+        });
 
-    map.addLayer(vectorLayer);
+        // Add a text style to display the name as a label
+        var textStyle = new ol.style.Text({
+          text: item.name,
+          font: '12px Calibri,sans-serif',
+          fill: new ol.style.Fill({ color: '#000' }),
+          stroke: new ol.style.Stroke({ color: '#fff', width: 2 }),
+          offsetY: -15, // Position the text above the point
+        });
 
-    // Fit the map to the extent of the data
-    map.getView().fit(vectorSource.getExtent());
+        var strokeStyle = new ol.style.Stroke({
+          color: 'blue',
+          width: 2,
+        });
+
+        var fillStyle = new ol.style.Fill({
+          color: 'rgba(0, 0, 255, 0.1)', 
+        });
+
+        feature.setStyle(new ol.style.Style({
+          stroke: strokeStyle,
+          fill: fillStyle,
+          text: textStyle,
+        }));
+
+        return feature;
+      });
+
+      // Set features to LacDuongVectorSource
+      LacDuongVectorSource.addFeatures(features);
+
+      var vectorLayer = new ol.layer.Vector({
+        source: LacDuongVectorSource,
+        title: 'Fetched Data', // Set a title for the layer
+      });
+
+      map.addLayer(vectorLayer);
+
+      // Fit the map to the extent of the data
+      map.getView().fit(LacDuongVectorSource.getExtent());
+    } else {
+      console.error('Error: Unexpected data structure');
+    }
   })
   .catch(error => {
     console.error('Error fetching data:', error);
   });
-
-var LacDuongTile = new ol.layer.Tile({
-  title: "Lac Duong",
-  source: LacDuongVectorSource,
-});
-
-map.addLayer(LacDuongTile)
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------
 // ====================================== CONTROLS ======================================
@@ -215,9 +248,7 @@ map.on("singleclick", function (evt) {
         var feature = data.features[0];
         var props = feature.properties;
         content.innerHTML =
-          "<h3> Xã: </h3> <p>" +
-          props.NAME_4.toUpperCase() +
-          "</p>";
+          "<h3> Xã: </h3> <p>" + props.NAME_4.toUpperCase() + "</p>";
         popup.setPosition(evt.coordinate);
       });
     } else {
@@ -574,55 +605,81 @@ function addMapLayerList() {
     type: "GET",
     url: "http://localhost:8080/geoserver/wfs?service=wfs&version=1.1.0&request=GetCapabilities",
     dataType: "xml",
-    success: function(xml) {
+    success: function (xml) {
       var select = $("#selectLayer");
       select.append("<option class='ddindent' value=''></option>");
-      $(xml).find("FeatureType").each(function() {
-        $(this).find("Name").each(function() {
-          var value = $(this).text();
-          select.append("<option class='ddindent' value='" + value + "'>" + value + "</option>");
+      $(xml)
+        .find("FeatureType")
+        .each(function () {
+          $(this)
+            .find("Name")
+            .each(function () {
+              var value = $(this).text();
+              select.append(
+                "<option class='ddindent' value='" +
+                  value +
+                  "'>" +
+                  value +
+                  "</option>"
+              );
+            });
         });
-      });
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       console.error("Error fetching layer list:", error);
-    }
+    },
   });
 }
 
-$("#selectLayer").change(function() {
+$("#selectLayer").change(function () {
   var select = $("#selectAttribute");
   select.empty();
   var value_layer = $(this).val();
   $.ajax({
     type: "GET",
-    url: "http://localhost:8080/geoserver/wfs?service=WFS&request=DescribeFeatureType&version=1.1.0&typeName=" + value_layer,
+    url:
+      "http://localhost:8080/geoserver/wfs?service=WFS&request=DescribeFeatureType&version=1.1.0&typeName=" +
+      value_layer,
     dataType: "xml",
-    success: function(xml) {
+    success: function (xml) {
       var select = $("#selectAttribute");
-      $(xml).find("xsd\\:sequence").each(function() {
-        $(this).find("xsd\\:element").each(function() {
-          var value = $(this).attr("name");
-          var type = $(this).attr("type");
-          if (value != "geom" && value != "the_geom") {
-            select.append("<option class='ddindent' value='" + type + "'>" + value + "</option>");
-          }
+      $(xml)
+        .find("xsd\\:sequence")
+        .each(function () {
+          $(this)
+            .find("xsd\\:element")
+            .each(function () {
+              var value = $(this).attr("name");
+              var type = $(this).attr("type");
+              if (value != "geom" && value != "the_geom") {
+                select.append(
+                  "<option class='ddindent' value='" +
+                    type +
+                    "'>" +
+                    value +
+                    "</option>"
+                );
+              }
+            });
         });
-      });
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       console.error("Error fetching attribute list:", error);
-    }
+    },
   });
 });
 
-$("#selectAttribute").change(function() {
+$("#selectAttribute").change(function () {
   var operator = $("#selectOperator");
   operator.empty();
   var value_type = $(this).val();
   var value_attribute = $("#selectAttribute option:selected").text();
   operator.append("<option value=''>Select operator</option>");
-  if (value_type == "xsd:short" || value_type == "xsd:int" || value_type == "xsd:double") {
+  if (
+    value_type == "xsd:short" ||
+    value_type == "xsd:int" ||
+    value_type == "xsd:double"
+  ) {
     operator.append("<option value='>'>Greater than</option>");
     operator.append("<option value='<'>Less than</option>");
     operator.append("<option value='='>Equal to</option>");
@@ -632,7 +689,7 @@ $("#selectAttribute").change(function() {
   }
 });
 
-$("#attQryRun").click(function() {
+$("#attQryRun").click(function () {
   map.set("isLoading", "YES");
   var layer = $("#selectLayer").val();
   var attribute = $("#selectAttribute").val();
@@ -649,13 +706,21 @@ $("#attQryRun").click(function() {
   } else if (txt.length == 0) {
     alert("Enter Value");
   } else {
-    var value_txt = (operator === "Like") ? "%" + txt + "%" : txt;
+    var value_txt = operator === "Like" ? "%" + txt + "%" : txt;
 
-    var url = "http://localhost:8080/geoserver/GisTest/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=" + layer + "&cql_filter=" + attributeSelectedOption + operator + "'" + txt + "'&outputFormat=application/json";
+    var url =
+      "http://localhost:8080/geoserver/GisTest/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=" +
+      layer +
+      "&cql_filter=" +
+      attributeSelectedOption +
+      operator +
+      "'" +
+      txt +
+      "'&outputFormat=application/json";
 
     addGeoJsonToMap(url);
     populateQueryTable(url);
-    setTimeout(function() {
+    setTimeout(function () {
       addRowHandlers(url);
     }, 300);
     map.set("isLoading", "NO");
@@ -670,8 +735,7 @@ function addGeoJsonToMap(url) {
       width: 3,
     }),
     image: new ol.style.Circle({
-      radius:
-      7,
+      radius: 7,
       fill: new ol.style.Fill({
         color: "#FFFF00",
       }),
@@ -686,7 +750,7 @@ function addGeoJsonToMap(url) {
     style: style,
   });
 
-  geojson.getSource().on("addfeature", function() {
+  geojson.getSource().on("addfeature", function () {
     map.getView().fit(geojson.getSource().getExtent(), {
       duration: 1590,
       size: map.getSize(),
@@ -704,9 +768,9 @@ function populateQueryTable(url) {
     }
   }
 
-  $.getJSON(url, function(data) {
+  $.getJSON(url, function (data) {
     var col = [];
-    col.push('id');
+    col.push("id");
     for (var i = 0; i < data.features.length; i++) {
       for (var key in data.features[i].properties) {
         if (!col.includes(key)) {
@@ -717,7 +781,10 @@ function populateQueryTable(url) {
 
     var table = document.createElement("table");
 
-    table.setAttribute("class", "table table-bordered table-hover table-condensed");
+    table.setAttribute(
+      "class",
+      "table table-bordered table-hover table-condensed"
+    );
     table.setAttribute("id", "attQryTable");
 
     var tr = table.insertRow(-1);
@@ -733,15 +800,15 @@ function populateQueryTable(url) {
       for (var j = 0; j < col.length; j++) {
         var tabCell = tr.insertCell(-1);
         if (j == 0) {
-          tabCell.innerHTML = data.features[i]['id'];
+          tabCell.innerHTML = data.features[i]["id"];
         } else {
           tabCell.innerHTML = data.features[i].properties[col[j]];
         }
       }
     }
 
-    var tabDiv = document.getElementById('attListDiv');
-    var delTab = document.getElementById('attQryTable');
+    var tabDiv = document.getElementById("attListDiv");
+    var delTab = document.getElementById("attQryTable");
     if (delTab) {
       tabDiv.removeChild(delTab);
     }
@@ -769,38 +836,38 @@ function populateQueryTable(url) {
   featureOverlay = new ol.layer.Vector({
     source: new ol.source.Vector(),
     map: map,
-    style: highlightStyle
+    style: highlightStyle,
   });
 }
 
 function addRowHandlers() {
   var table = document.getElementById("attQryTable");
   var rows = document.getElementById("attQryTable").rows;
-  var heads = table.getElementsByTagName('th');
+  var heads = table.getElementsByTagName("th");
   var col_no;
 
   for (var i = 0; i < heads.length; i++) {
     var head = heads[i];
-    if (head.innerHTML == 'id') {
+    if (head.innerHTML == "id") {
       col_no = i + 1;
     }
   }
 
   for (i = 0; i < rows.length; i++) {
-    rows[i].onclick = function() {
-      return function() {
+    rows[i].onclick = (function () {
+      return function () {
         featureOverlay.getSource().clear();
 
-        $(function() {
-          $("#attQryTable td").each(function() {
+        $(function () {
+          $("#attQryTable td").each(function () {
             $(this).parent("tr").css("background-color", "white");
           });
         });
 
         var cell = this.cells[col_no - 1];
         var id = cell.innerHTML;
-        $(document).ready(function() {
-          $("#attQryTable td:nth-child(" + col_no + ")").each(function() {
+        $(document).ready(function () {
+          $("#attQryTable td:nth-child(" + col_no + ")").each(function () {
             if ($(this).text() == id) {
               $(this).parent("tr").css("background-color", "#d1d8e2");
             }
@@ -813,19 +880,17 @@ function addRowHandlers() {
           if (features[i].getId() == id) {
             featureOverlay.getSource().addFeature(features[i]);
 
-            featureOverlay.getSource().on('addfeature', function() {
-              map.getView().fit(
-                featureOverlay.getSource().getExtent(), {
-                  duration: 1500,
-                  size: map.getSize(),
-                  maxZoom: 24
-                }
-              );
+            featureOverlay.getSource().on("addfeature", function () {
+              map.getView().fit(featureOverlay.getSource().getExtent(), {
+                duration: 1500,
+                size: map.getSize(),
+                maxZoom: 24,
+              });
             });
           }
         }
       };
-    }(rows[i]);
+    })(rows[i]);
   }
 }
 
@@ -839,4 +904,3 @@ function clearAndRemoveLayers() {
     map.removeLayer(featureOverlay);
   }
 }
-
