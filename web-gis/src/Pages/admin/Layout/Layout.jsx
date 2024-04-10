@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { BsSun, BsMoon, BsPaintBucket } from 'react-icons/bs';
-import { BiLogOutCircle } from 'react-icons/bi';
+import { BiLogOutCircle, BiHome } from 'react-icons/bi';
 import { AiOutlineDropbox, AiOutlineRight } from 'react-icons/ai';
 
 import profileImg from '../../../assets/images/avatar.jpg';
@@ -56,15 +56,15 @@ const AdminLayout = () => {
                             <div className={styles.menu}>
                                 <ul className="menu-links ps-0">
                                     <li className="nav-link">
-                                        <Link to="/admin/categories">
-                                            <AiOutlineDropbox className={styles.icon} />
-                                            <span className={clsx(styles.text, 'nav-text')}>Xã</span>
+                                        <Link to="/admin">
+                                            <BiHome className={styles.icon} />
+                                            <span className={clsx(styles.text, 'nav-text')}>Dashboard</span>
                                         </Link>
                                     </li>
 
                                     <li className="nav-link">
-                                        <Link to="/admin/products">
-                                            <BsPaintBucket className={styles.icon} />
+                                        <Link to="/admin/categories">
+                                            <AiOutlineDropbox className={styles.icon} />
                                             <span className={clsx(styles.text, 'nav-text')}>Loại sản phẩm</span>
                                         </Link>
                                     </li>
@@ -73,13 +73,6 @@ const AdminLayout = () => {
                                         <Link to="/admin/products">
                                             <BsPaintBucket className={styles.icon} />
                                             <span className={clsx(styles.text, 'nav-text')}>Sản phẩm</span>
-                                        </Link>
-                                    </li>
-
-                                    <li className="nav-link">
-                                        <Link to="/admin/products">
-                                            <BsPaintBucket className={styles.icon} />
-                                            <span className={clsx(styles.text, 'nav-text')}>Sản lượng</span>
                                         </Link>
                                     </li>
                                 </ul>

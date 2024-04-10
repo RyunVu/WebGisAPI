@@ -1,5 +1,7 @@
 import './Navbar.module.scss';
 
-export default function Navbar({ children }) {
-    return children;
+import React from 'react';
+
+export default function Navbar() {
+    return <div>Navbar</div>;
 }

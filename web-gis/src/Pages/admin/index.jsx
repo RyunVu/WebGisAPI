@@ -1,4 +1,4 @@
-export { default as AddminHome } from './Dashboard/Dashboard';
+export { default as AdminHome } from './Dashboard/Dashboard';
 export { default as AdminLayout } from './Layout/Layout';
 export { default as Communes } from './Commune/Communes';
 export { default as CommuneEdit } from './Commune/CommuneEdit';

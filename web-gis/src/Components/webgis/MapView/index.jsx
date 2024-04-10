@@ -1,5 +1,7 @@
 import './MapView.module.scss';
 
-export default function MapView({ children }) {
-    return children;
+import React from 'react';
+
+export default function MapView() {
+    return <div>MapView</div>;
 }
