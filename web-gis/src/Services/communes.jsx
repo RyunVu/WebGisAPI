@@ -8,7 +8,16 @@ export async function getCommunesByQueries(queries) {
 }
 
 export async function getCommunes() {
-    const { data } = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/commune`);
-    if (data.isSuccess) return data.result;
-    else return null;
+    // console.log('API endpoint:', process.env.REACT_APP_API_ENDPOINT);
+    try {
+        const { data } = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/commune`);
+        if (data.isSuccess) {
+            return data.result;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching communes:', error);
+        return null;
+    }
 }
