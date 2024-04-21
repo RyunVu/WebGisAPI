@@ -1,7 +1,7 @@
 import styles from './MapView.module.scss';
 import Sidebar from '../Sidebar';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import OSM from 'ol/source/OSM';
 import { WKT } from 'ol/format';
@@ -17,11 +17,19 @@ import { Style, Stroke, Fill, Text } from 'ol/style';
 
 import { getCommunes } from '../../../Services/communes';
 import { getPlantOutputsWithCommuneId } from '../../../Services/plantoutputs';
+import Navbar from '../Navbar';
 
 export default function MapView() {
+    // Nav Bar parameters
+    const [plantId, setPlantId] = useState(null);
+    const [year, setYear] = useState(null);
+    const [month, setMonth] = useState(null);
+
     const [plantOutputs, setPlantOutputs] = useState(null);
     const [selectedCommune, setSelectedCommune] = useState(null);
     const [sidebarVisible, setSidebarVisible] = useState(false);
+
+    const mapRef = useRef(null);
 
     useEffect(() => {
         const map = new Map({
@@ -37,6 +45,8 @@ export default function MapView() {
             }),
             controls: [],
         });
+
+        mapRef.current = map;
 
         const LacDuongVectorSource = new VectorSource();
 
@@ -191,33 +201,21 @@ export default function MapView() {
             map.addControl(mousePosition);
         }
 
-        // const layerSwitcher = new LayerSwitcher();
-        // map.addControl(layerSwitcher);
-
         return () => {
             map.getLayers().clear();
             map.getInteractions().clear();
             map.getControls().clear();
-            // map.removeInteraction(hoverInteraction);
             map.setTarget(null);
         };
     }, []);
 
     return (
         <>
+            <Navbar setPlantId={setPlantId} setYear={setYear} setMonth={setMonth} map={mapRef.current} />
             <div className={styles.mapContainer}>
                 <div id="map" style={{ width: '100vw', height: '95vh' }}></div>
-
                 <Sidebar commune={selectedCommune} plantOutputs={plantOutputs} isVisible={sidebarVisible} />
             </div>
-
-            {/* <div className={styles.map}>
-                    <div id="map" style={{ width: '100%', height: '100%' }}></div>
-                    <div id={styles.popup} className={styles.olPopup}>
-                        <button type="button" id={styles.popupCloser} className={styles.olPopupCloser}></button>
-                        <div id={styles.popupContent}></div>
-                    </div>
-                </div> */}
         </>
     );
 }
