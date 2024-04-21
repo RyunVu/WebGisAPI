@@ -28,6 +28,7 @@
     margin-bottom: 5px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .colorBox {
@@ -35,4 +36,20 @@
     height: 20px;
     margin-right: 5px;
     border-radius: 3px;
+}
+
+.legendLabel {
+    padding: 0 20px;
+}
+
+.notification {
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+    background-color: #f44336;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }

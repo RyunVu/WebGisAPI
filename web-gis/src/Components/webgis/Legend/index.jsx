@@ -13,8 +13,9 @@ export default function Legend({ colors }) {
                         colors.length > 0 &&
                         colors.map((color, index) => (
                             <li key={index} className={styles.legendItem}>
-                                <span className={styles.colorBox} style={{ backgroundColor: color }}></span>
-                                <span>Xếp hạng {index + 1}</span>
+                                <span className={styles.colorBox} style={{ backgroundColor: color.color }}></span>
+                                <span className={styles.legendLabel}> - {color.communeName} - </span>
+                                <span> Xếp hạng {index + 1} </span>
                             </li>
                         ))}
                 </ul>

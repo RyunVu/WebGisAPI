@@ -13,7 +13,7 @@ import styles from './Navbar.module.scss';
 
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-function generateColors(size) {
+function generateColors(size, plantOutputs) {
     const colors = [];
     const initialHue = 0;
     const finalHue = 240;
@@ -24,7 +24,8 @@ function generateColors(size) {
         const hue = initialHue + i * hueStep;
 
         const color = `hsla(${hue}, 80%, 50%, 0.5)`;
-        colors.push(color);
+        const communeName = plantOutputs[i].commune.name;
+        colors.push({ color, communeName });
     }
 
     return colors;
@@ -38,6 +39,10 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
 
+    const [filterApplied, setFilterApplied] = useState(false);
+
+    const [showNotification, setShowNotification] = useState(false);
+
     const [colorLayer, setColorLayer] = useState(null);
     const [showLegend, setShowLegend] = useState(false);
     const [colors, setColors] = useState([]);
@@ -47,6 +52,8 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
         setPlantId(selectedPlant);
         setYear(selectedYear);
         setMonth(selectedMonth);
+
+        setFilterApplied(true);
 
         await fetchPlantOutputsWithPlantIdAndDate();
     };
@@ -64,6 +71,8 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
         setSelectedMonth('');
         setPlantOutputs([]);
 
+        setFilterApplied(false);
+
         map.removeLayer(colorLayer);
 
         setColors(null);
@@ -79,6 +88,7 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
                 selectedMonth,
             );
             setPlantOutputs(plantOutputsData.items);
+            console.log(plantOutputs);
         } catch (error) {
             console.error('Error fetching plant outputs:', error);
         }
@@ -100,21 +110,30 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (plantOutputs.length === 0 && filterApplied) {
+            setShowNotification(true);
+        } else {
+            setShowNotification(false);
+        }
+    }, [plantOutputs, filterApplied]);
+
     const updateColorLayer = () => {
         if (!map || !plantOutputs || plantOutputs.length === 0) return;
 
-        const newColors = generateColors(plantOutputs.length);
+        const newColors = generateColors(plantOutputs.length, plantOutputs);
         setColors(newColors);
 
         const features = plantOutputs.map((item, index) => {
             const geometry = item.commune.geometry;
             const quantity = item.quantity;
-            const fillColor = newColors[index];
+            const fillColor = newColors[index].color;
             const feature = new Feature({
                 geometry: new WKT().readGeometry(geometry, {
                     dataProjection: 'EPSG:4326',
                     featureProjection: 'EPSG:3857',
                 }),
+                id: item.commune.id,
                 quantity: quantity,
             });
             feature.setStyle(
@@ -193,6 +212,9 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
                     Bỏ lọc
                 </button>
             </div>
+            {showNotification && (
+                <div className={styles.notification}>Hiện tại không có dữ liệu cho bộ lọc hiện tại</div>
+            )}
             <Legend colors={colors} />
         </>
     );
