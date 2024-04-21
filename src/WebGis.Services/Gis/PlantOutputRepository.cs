@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 using WebGis.Core.Contracts;
 using WebGis.Core.Entities;
 using WebGis.Core.Queries;
@@ -37,6 +38,55 @@ namespace WebGis.Services.Gis
 				.ToPagedListAsync(pagingParams, cancellationToken);
 		}
 
+		private IQueryable<PlantOutput> FilterPlantOutputByCommuneId(
+			Guid communeId)
+		{
+			IQueryable<PlantOutput> plantOutputs = _dbContext.Set<PlantOutput>()
+				.WhereIf(communeId != Guid.Empty,
+				c => c.Commune.Id.Equals(communeId));
+
+			return plantOutputs;
+		}
+
+
+		public async Task<IPagedList<T>> GetPagedPlantOutputByCommuneIdAsync<T>(
+			Guid communeId,
+			IPagingParams pagingParams,
+			Func<IQueryable<PlantOutput>, IQueryable<T>> mapper,
+			CancellationToken cancellationToken = default)
+		{
+			var plantOutputs = FilterPlantOutputByCommuneId(communeId);
+			return await mapper(plantOutputs)
+				.ToPagedListAsync(pagingParams, cancellationToken);
+		}
+
+		private IQueryable<PlantOutput> FilterPlantOutputByPlantIdAndDate(
+			Guid plantId, int year, int month)
+		{
+			IQueryable<PlantOutput> plantOutputs = _dbContext.Set<PlantOutput>()
+				.WhereIf(plantId != Guid.Empty,
+				c => c.Plant.Id.Equals(plantId))
+				.WhereIf(year > 0,
+				y => y.Time.Year == year)
+				.WhereIf(month > 0,
+				y => y.Time.Month == month);
+			
+			return plantOutputs;
+		}
+
+		public async Task<IPagedList<T>> GetPagedPlantOutputByPlantIdAndDateAsync<T>(
+			Guid plantId,
+			int year,
+			int month, 
+			IPagingParams pagingParams,
+			Func<IQueryable<PlantOutput>, IQueryable<T>> mapper,
+			CancellationToken cancellationToken = default)
+		{
+			var plantOutputs = FilterPlantOutputByPlantIdAndDate(plantId, year, month);
+			return await mapper(plantOutputs)
+				.ToPagedListAsync(pagingParams, cancellationToken);
+		}
+
 		public async Task<IList<PlantOutput>> GetPlantOutputsAsync(
 			CancellationToken cancellationToken = default)
 		{
@@ -44,6 +94,7 @@ namespace WebGis.Services.Gis
 				.OrderBy(n => n.Quantity)
 				.ToListAsync(cancellationToken);
 		}
+
 
 		public async Task<PlantOutput> GetPlantOutputByIdAsync(
 			Guid id,
@@ -53,6 +104,8 @@ namespace WebGis.Services.Gis
 			if (includeDetail)
 			{
 				return await _dbContext.Set<PlantOutput>()
+					.Include(p => p.Plant)
+					.Include(c => c.Commune)
 					.Where(d => d.Id.Equals(id))
 					.FirstOrDefaultAsync(cancellationToken);
 			}
@@ -88,6 +141,17 @@ namespace WebGis.Services.Gis
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
+		public async Task<IList<PlantOutput>> GetPlantOutputByCommuneId(
+			Guid communeId,
+			CancellationToken cancellationToken = default)
+		{
+			return await _dbContext.Set<PlantOutput>()
+				.Include(c => c.Commune)
+				.Include(p => p.Plant)
+				.Where(c => c.CommuneId.Equals(communeId))
+				.ToListAsync(cancellationToken);
+		}
+
 		public async Task<bool> AddOrUpdatePlantOutputAsync(
 			PlantOutput plantOutput,
 			CancellationToken cancellationToken = default)
@@ -113,5 +177,6 @@ namespace WebGis.Services.Gis
 				.Where(c => c.Id.Equals(id))
 				.ExecuteDeleteAsync(cancellationToken) > 0;
 		}
+
 	}
 }

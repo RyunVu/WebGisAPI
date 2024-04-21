@@ -4,6 +4,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WebGis.Core.Collections;
+using WebGis.Core.Contracts;
 using WebGis.Core.Entities;
 using WebGis.Core.Queries;
 using WebGis.Services.Extensions;
@@ -45,6 +46,15 @@ namespace WebGis.WebAPI.Endpoints
 				.Produces(204)
 				.Produces(400)
 				.Produces(409);
+
+			routeGroupBuilder.MapGet("/commune/{communeId:Guid}", GetPlantOutputsWithCommuneId)
+				.WithName("GetPlantOutputsByCommuneId")
+				.Produces<ApiResponse<PaginationResult<PlantOutputCommuneItem>>>();
+
+
+			routeGroupBuilder.MapGet("/plant/{plantId:Guid}/year/{year:int}/month/{month:int}", GetPlantOutsWithPlantIdAndDate)
+				.WithName("GetPlantOutputsByPlantIdAndDate")
+				.Produces<ApiResponse<PaginationResult<PlantOutputPlantItem>>>();
 		}
 
 		#region Get
@@ -57,7 +67,7 @@ namespace WebGis.WebAPI.Endpoints
 			var PlantOutputs = await plantOutputRepo
 				.GetPagedPlantOutputAsync(
 					plantOutputQuery, model,
-					PlantOutput => PlantOutput.ProjectToType<PlantOutputDto>());
+					plantOutput => plantOutput.ProjectToType<PlantOutputDto>());
 
 			var paginationResult = new
 				PaginationResult<PlantOutputDto>(PlantOutputs);
@@ -93,6 +103,63 @@ namespace WebGis.WebAPI.Endpoints
 					: Results.Ok(ApiResponse.Fail(
 						HttpStatusCode.NotFound, $"Không tìm thấy phân loại với mã định danh: `{slug}`"));
 		}
+		private static async Task<IResult> GetPlantOutputsWithCommuneId(
+			Guid communeId,
+			[AsParameters] PagingModel pagingModel,
+			IPlantOutputRepository plantOutputRepo,
+			ICommuneRepository communeRepo)
+		{
+
+			var communeData = await communeRepo.GetCommuneByIdAsync(communeId);
+
+			if (communeData == null)
+			{ 
+				return Results.Ok(ApiResponse.Fail(
+					HttpStatusCode.NotFound,
+					$"Không tìm thấy xã với id tương ứng"));
+			}
+
+			var plantOutputs = await plantOutputRepo
+				.GetPagedPlantOutputByCommuneIdAsync(
+				communeId, pagingModel,
+				plantOutput => plantOutput.ProjectToType<PlantOutputDto>());
+
+
+			var paginationResult = new
+				PaginationResult<PlantOutputDto>(plantOutputs);
+
+
+			return Results.Ok(ApiResponse.Success(paginationResult));
+		}
+
+		private static async Task<IResult> GetPlantOutsWithPlantIdAndDate(
+			Guid plantId,
+			int year,
+			int month,
+			[AsParameters] PagingModel pagingModel,
+			IPlantOutputRepository plantOutputRepo,
+			IPlantRepository plantRepo)
+		{
+			var plantData = await plantRepo.GetPlantByIdAsync(plantId);
+
+			if (plantData == null)
+			{
+				return Results.Ok(ApiResponse.Fail(
+					HttpStatusCode.NotFound,
+					$"Không tìm thấy cây với id tương ứng"));
+			}
+
+			var plantOutputs = await plantOutputRepo
+				.GetPagedPlantOutputByPlantIdAndDateAsync(
+				plantId, year, month, pagingModel,
+				plantOutput => plantOutput.ProjectToType<PlantOutputDto>());
+
+			var paginationResult = new
+				PaginationResult<PlantOutputDto>(plantOutputs);
+
+			return Results.Ok(ApiResponse.Success(paginationResult));
+			
+		}
 
 		#endregion
 
@@ -126,9 +193,7 @@ namespace WebGis.WebAPI.Endpoints
 				return Results.Ok(ApiResponse.Fail(HttpStatusCode.Conflict,
 					$"Slug '{model.UrlSlug}' đã được sử dụng"));
 			}
-
 			
-
 			var plantOutput = mapper.Map<PlantOutput>(model);
 			plantOutput.UrlSlug = slug;
 			plantOutput.Time = DateTime.UtcNow;
@@ -143,6 +208,7 @@ namespace WebGis.WebAPI.Endpoints
 					ApiResponse.Fail(
 						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 		}
+
 
 		#endregion
 

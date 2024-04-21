@@ -113,5 +113,6 @@ namespace WebGis.Services.Gis
 				.Where(c => c.Id.Equals(id))
 				.ExecuteDeleteAsync(cancellationToken) > 0;
 		}
+
 	}
 }

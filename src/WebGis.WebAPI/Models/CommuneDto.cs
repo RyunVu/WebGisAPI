@@ -1,6 +1,4 @@
-﻿using GeoJSON.Net;
-using NetTopologySuite.Geometries;
-using WebGis.Core.Dto;
+﻿using WebGis.Core.Dto;
 
 namespace WebGis.WebAPI.Models
 {

@@ -23,6 +23,8 @@ namespace WebGis.Services.Gis
 			string slug,
 			CancellationToken cancellationToken = default);
 
+		//Task<Ilist<Commune>>GetCommuneOutputByIdAsync
+
 		Task<bool> IsCommuneIdExistedAsync(
 			Guid id,
 			CancellationToken cancellationToken = default);
