@@ -1,3 +1,25 @@
+.mapContainer {
+    position: relative;
+    width: '100vw';
+    height: '95vh';
+    overflow: hidden;
+}
+
+// .sidebar {
+//     width: 0;
+//     height: 95vh;
+//     background-color: #f0f0f0;
+//     position: absolute;
+//     top: 10vh;
+//     right: 0;
+//     transition: width 0.3s ease;
+//     overflow: hidden;
+// }
+
+// .sidebar.visible {
+//     width: 20vw;
+// }
+
 .mousePosition {
     position: fixed;
     top: auto;

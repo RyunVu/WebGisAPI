@@ -1,20 +1,28 @@
 import styles from './MapView.module.scss';
-import React, { useEffect } from 'react';
+import Sidebar from '../Sidebar';
+
+import React, { useEffect, useState } from 'react';
+
+import OSM from 'ol/source/OSM';
+import { WKT } from 'ol/format';
+import { fromLonLat } from 'ol/proj';
+import TileLayer from 'ol/layer/Tile';
 import { Feature, Map, View } from 'ol';
 import { Select } from 'ol/interaction';
-import { fromLonLat } from 'ol/proj';
 import { MousePosition } from 'ol/control';
-import { Style, Stroke, Fill, Text } from 'ol/style';
+import { createStringXY } from 'ol/coordinate';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
-import { WKT } from 'ol/format';
-// import LayerSwitcher from 'ol-layerswitcher';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import { createStringXY } from 'ol/coordinate';
+import { Style, Stroke, Fill, Text } from 'ol/style';
+
 import { getCommunes } from '../../../Services/communes';
+import { getPlantOutputsWithCommuneId } from '../../../Services/plantoutputs';
 
 export default function MapView() {
+    const [plantOutputs, setPlantOutputs] = useState(null);
+    const [selectedCommune, setSelectedCommune] = useState(null);
+    const [sidebarVisible, setSidebarVisible] = useState(false);
+
     useEffect(() => {
         const map = new Map({
             target: 'map',
@@ -104,11 +112,41 @@ export default function MapView() {
 
                             map.addInteraction(hoverInteraction);
 
+                            const clickInteraction = new Select({
+                                condition: (e) => e.type === 'click',
+                            });
+
+                            clickInteraction.on('select', (e) => {
+                                if (e.selected.length > 0) {
+                                    const selectedFeature = e.selected[0];
+                                    const communeInfo = {
+                                        name: selectedFeature.get('name'),
+                                        description: selectedFeature.get('description'),
+                                    };
+                                    getPlantOutputsWithCommuneId(selectedFeature.get('id')) // Assuming 'id' is the ID of the commune
+                                        .then((plantOutputs) => {
+                                            setSelectedCommune(communeInfo);
+                                            setSidebarVisible(true);
+                                            setPlantOutputs(plantOutputs);
+                                            console.log(plantOutputs);
+                                        })
+                                        .catch((error) => {
+                                            console.error('Error fetching plant outputs:', error);
+                                        });
+                                } else {
+                                    setSelectedCommune(null);
+                                    setSidebarVisible(false);
+                                }
+                            });
+
+                            map.addInteraction(clickInteraction);
+
                             const feature = new Feature({
                                 geometry: new WKT().readGeometry(item.geometry, {
                                     dataProjection: 'EPSG:4326',
                                     featureProjection: 'EPSG:3857',
                                 }),
+                                id: item.id,
                                 name: item.name,
                                 description: item.description,
                             });
@@ -167,7 +205,11 @@ export default function MapView() {
 
     return (
         <>
-            <div id="map" style={{ width: '100vw', height: '95vh', position: 'absolute' }}></div>
+            <div className={styles.mapContainer}>
+                <div id="map" style={{ width: '100vw', height: '95vh' }}></div>
+
+                <Sidebar commune={selectedCommune} plantOutputs={plantOutputs} isVisible={sidebarVisible} />
+            </div>
 
             {/* <div className={styles.map}>
                     <div id="map" style={{ width: '100%', height: '100%' }}></div>

@@ -1,0 +1,14 @@
+.sidebar {
+    width: 0;
+    height: 95vh;
+    background-color: #f0f0f0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+
+.visible {
+    width: 30vw;
+}

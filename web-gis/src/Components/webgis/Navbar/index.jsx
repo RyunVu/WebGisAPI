@@ -1,50 +1,40 @@
 import styles from './Navbar.module.scss';
-import React, { useState, useEffect, useRef } from 'react';
-import { getCommunes } from '../../../Services/communes';
+import React, { useState, useEffect } from 'react';
 import { getPlants } from '../../../Services/plants';
+import { getPlantOutputsWithPlantIdAndDate } from '../../../Services/plantoutputs';
 
-export default function Navbar({ setCommuneId, setPlantId, setYear, setMonth }) {
-    const [communes, setCommunes] = useState([]);
+const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+export default function Navbar({ setPlantId, setYear, setMonth }) {
     const [plants, setPlants] = useState([]);
-    const [selectedCommune, setSelectedCommune] = useState('');
     const [selectedPlant, setSelectedPlant] = useState('');
-    const [selectedDate, setSelectedDate] = useState('');
-
-    // Component's refs
-    const communeRef = useRef();
-    const plantRef = useRef();
-    const yearRef = useRef();
-    const monthRef = useRef();
+    const [selectedYear, setSelectedYear] = useState('');
+    const [selectedMonth, setSelectedMonth] = useState('');
 
     // Component's event handlers
     const handleFilter = (e) => {
         e.preventDefault();
-        setCommuneId(communeRef.current.value);
-        setPlantId(plantRef.current.value);
-        setYear(yearRef.current.value);
-        setMonth(monthRef.current.value);
+        setPlantId(selectedPlant);
+        setYear(selectedYear);
+        setMonth(selectedMonth);
+
+        fetchPlantOutputsWithPlantIdAndDate();
     };
 
     const handleClearFilter = () => {
-        setSelectedCommune('');
         setSelectedPlant('');
-        setSelectedDate('');
-        setCommuneId('');
-        setPlantId('');
-        setYear('');
-        setMonth('');
+        setSelectedYear('');
+        setSelectedMonth('');
+    };
+
+    const fetchPlantOutputsWithPlantIdAndDate = async () => {
+        const plantOutputs = await getPlantOutputsWithPlantIdAndDate(selectedPlant, selectedYear);
+        console.log('Plant outputs:', plantOutputs);
     };
 
     // Fetch communes and plants when the component mounts
     useEffect(() => {
         async function fetchData() {
-            const communesData = await getCommunes();
-            if (communesData && Array.isArray(communesData.items)) {
-                setCommunes(communesData.items);
-            } else {
-                console.error('Communes data is not in the expected format:', communesData);
-            }
-
             const plantsData = await getPlants();
             if (plantsData && Array.isArray(plantsData.items)) {
                 setPlants(plantsData.items);
@@ -56,30 +46,10 @@ export default function Navbar({ setCommuneId, setPlantId, setYear, setMonth }) 
         fetchData();
     }, []);
 
-    const executeQuery = () => {
-        // Define your execute query logic here
-    };
-
     return (
         <div className={styles.navbar}>
             <div className={styles.selectContainer}>
-                {/* Commune selection */}
-                <select
-                    className={styles.select}
-                    value={selectedCommune}
-                    onChange={(e) => setSelectedCommune(e.target.value)}>
-                    <option value="">-- Chọn Xã --</option>
-                    {Array.isArray(communes) &&
-                        communes.map((commune) => (
-                            <option key={commune.id} value={commune.id}>
-                                {commune.name}
-                            </option>
-                        ))}
-                </select>
-            </div>
-
-            <div className={styles.selectContainer}>
-                {/* Category selection */}
+                {/* Plant selection */}
                 <select
                     className={styles.select}
                     value={selectedPlant}
@@ -94,14 +64,28 @@ export default function Navbar({ setCommuneId, setPlantId, setYear, setMonth }) 
                 </select>
             </div>
 
-            <div className={styles.datePicker}>
-                {/* Date selection */}
+            <div className={styles.inputContainer}>
                 <input
-                    className={styles.dateInput}
-                    type="month"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className={styles.input}
+                    type="text"
+                    placeholder="Nhập năm..."
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
                 />
+            </div>
+            <div className={styles.selectContainer}>
+                <select
+                    className={styles.select}
+                    title="Tháng"
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(e.target.value)}>
+                    <option value="">-- Chọn tháng --</option>
+                    {months.map((month) => (
+                        <option key={month} value={month}>
+                            Tháng {month}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             {/* Button to execute query */}
