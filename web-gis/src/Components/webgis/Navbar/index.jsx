@@ -18,14 +18,21 @@ function generateColors(size, plantOutputs) {
     const initialHue = 0;
     const finalHue = 240;
 
-    const hueStep = (finalHue - initialHue) / (size - 1);
-
-    for (let i = 0; i < size; i++) {
-        const hue = initialHue + i * hueStep;
-
+    if (size === 1) {
+        const hue = initialHue;
         const color = `hsla(${hue}, 80%, 50%, 0.5)`;
-        const communeName = plantOutputs[i].commune.name;
+        const communeName = plantOutputs[0].commune.name;
         colors.push({ color, communeName });
+    } else {
+        const hueStep = (finalHue - initialHue) / (size - 1);
+
+        for (let i = 0; i < size; i++) {
+            const hue = initialHue + i * hueStep;
+
+            const color = `hsla(${hue}, 80%, 50%, 0.5)`;
+            const communeName = plantOutputs[i].commune.name;
+            colors.push({ color, communeName });
+        }
     }
 
     return colors;
@@ -45,7 +52,10 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
 
     const [colorLayer, setColorLayer] = useState(null);
     const [showLegend, setShowLegend] = useState(false);
+
+    // For legend componet
     const [colors, setColors] = useState([]);
+    const [selectedPlantName, setSelectedPlantName] = useState('');
 
     const handleFilter = async (e) => {
         e.preventDefault();
@@ -67,6 +77,7 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
 
     const handleClearFilter = () => {
         setSelectedPlant('');
+        setSelectedPlantName('');
         setSelectedYear('');
         setSelectedMonth('');
         setPlantOutputs([]);
@@ -111,7 +122,20 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
     }, []);
 
     useEffect(() => {
+        if (plantOutputs.length > 0) {
+            const newColors = generateColors(plantOutputs.length, plantOutputs);
+            setColors(newColors);
+            setShowLegend(true);
+        }
+    }, [plantOutputs]);
+
+    useEffect(() => {
         if (plantOutputs.length === 0 && filterApplied) {
+            const timer = setTimeout(() => {
+                setShowNotification(true);
+            }, 200);
+            return () => clearTimeout(timer);
+        } else if (plantOutputs.length === 1 && !filterApplied) {
             setShowNotification(true);
         } else {
             setShowNotification(false);
@@ -171,7 +195,11 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
                     <select
                         className={styles.select}
                         value={selectedPlant}
-                        onChange={(e) => setSelectedPlant(e.target.value)}>
+                        onChange={(e) => {
+                            setSelectedPlant(e.target.value);
+                            const selectedPlant = plants.find((plant) => plant.id === e.target.value);
+                            setSelectedPlantName(selectedPlant ? selectedPlant.name : '');
+                        }}>
                         <option value="">-- Chọn cây --</option>
                         {Array.isArray(plants) &&
                             plants.map((plant) => (
@@ -215,7 +243,7 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
             {showNotification && (
                 <div className={styles.notification}>Hiện tại không có dữ liệu cho bộ lọc hiện tại</div>
             )}
-            <Legend colors={colors} />
+            <Legend colors={colors} selectedPlantName={selectedPlantName} />
         </>
     );
 }
