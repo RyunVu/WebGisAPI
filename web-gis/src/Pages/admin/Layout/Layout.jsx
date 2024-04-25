@@ -63,16 +63,28 @@ const AdminLayout = () => {
                                     </li>
 
                                     <li className="nav-link">
+                                        <Link to="/admin/communes">
+                                            <BsPaintBucket className={styles.icon} />
+                                            <span className={clsx(styles.text, 'nav-text')}>Xã</span>
+                                        </Link>
+                                    </li>
+
+                                    <li className="nav-link">
                                         <Link to="/admin/categories">
                                             <AiOutlineDropbox className={styles.icon} />
                                             <span className={clsx(styles.text, 'nav-text')}>Loại sản phẩm</span>
                                         </Link>
                                     </li>
-
                                     <li className="nav-link">
-                                        <Link to="/admin/products">
-                                            <BsPaintBucket className={styles.icon} />
-                                            <span className={clsx(styles.text, 'nav-text')}>Sản phẩm</span>
+                                        <Link to="/admin/plants">
+                                            <AiOutlineDropbox className={styles.icon} />
+                                            <span className={clsx(styles.text, 'nav-text')}>Nông sản</span>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-link">
+                                        <Link to="/admin/plantoutputs">
+                                            <AiOutlineDropbox className={styles.icon} />
+                                            <span className={clsx(styles.text, 'nav-text')}>Sản lượng</span>
                                         </Link>
                                     </li>
                                 </ul>

@@ -23,7 +23,10 @@ namespace WebGis.Services.Gis
 			return _dbContext.Set<PlantOutput>()
 				.WhereIf(!string.IsNullOrEmpty(query.Keyword),
 				a => a.Plant.Name.Contains(query.Keyword) &&
-				a.Commune.Name.Contains(query.Keyword));
+				a.Commune.Name.Contains(query.Keyword))
+				.WhereIf(query.Month > 0, m => m.Time.Month == query.Month)
+				.WhereIf(query.Year > 0, m => m.Time.Year == query.Year);
+
 		}
 
 
