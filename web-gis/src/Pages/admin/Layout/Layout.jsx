@@ -3,9 +3,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
-import { BsSun, BsMoon, BsPaintBucket } from 'react-icons/bs';
+import { BsSun, BsMoon } from 'react-icons/bs';
 import { BiLogOutCircle, BiHome } from 'react-icons/bi';
-import { AiOutlineDropbox, AiOutlineRight } from 'react-icons/ai';
+import { AiOutlineRight } from 'react-icons/ai';
+import { RiPlantLine } from 'react-icons/ri';
+import { MdOutlineOutput } from 'react-icons/md';
+import { CiMap } from 'react-icons/ci';
+import { TbCategory } from 'react-icons/tb';
 
 import profileImg from '../../../assets/images/avatar.jpg';
 
@@ -44,7 +48,7 @@ const AdminLayout = () => {
 
                                 <div className={clsx(styles.logoText, styles.text)}>
                                     <span className={styles.name}>Admin</span>
-                                    <span className={styles.profession}>Store</span>
+                                    <span className={styles.profession}>Ryun Vu</span>
                                 </div>
                             </div>
                             <div className={styles.toggle} onClick={handleToggle}>
@@ -64,26 +68,26 @@ const AdminLayout = () => {
 
                                     <li className="nav-link">
                                         <Link to="/admin/communes">
-                                            <BsPaintBucket className={styles.icon} />
+                                            <CiMap className={styles.icon} />
                                             <span className={clsx(styles.text, 'nav-text')}>Xã</span>
                                         </Link>
                                     </li>
 
                                     <li className="nav-link">
                                         <Link to="/admin/categories">
-                                            <AiOutlineDropbox className={styles.icon} />
+                                            <TbCategory className={styles.icon} />
                                             <span className={clsx(styles.text, 'nav-text')}>Loại sản phẩm</span>
                                         </Link>
                                     </li>
                                     <li className="nav-link">
                                         <Link to="/admin/plants">
-                                            <AiOutlineDropbox className={styles.icon} />
+                                            <RiPlantLine className={styles.icon} />
                                             <span className={clsx(styles.text, 'nav-text')}>Nông sản</span>
                                         </Link>
                                     </li>
                                     <li className="nav-link">
                                         <Link to="/admin/plantoutputs">
-                                            <AiOutlineDropbox className={styles.icon} />
+                                            <MdOutlineOutput className={styles.icon} />
                                             <span className={clsx(styles.text, 'nav-text')}>Sản lượng</span>
                                         </Link>
                                     </li>
