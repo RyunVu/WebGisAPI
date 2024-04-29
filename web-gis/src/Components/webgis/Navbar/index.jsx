@@ -55,7 +55,6 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
 
     // For legend componet
     const [colors, setColors] = useState([]);
-    const [selectedPlantName, setSelectedPlantName] = useState('');
 
     const handleFilter = async (e) => {
         e.preventDefault();
@@ -77,7 +76,6 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
 
     const handleClearFilter = () => {
         setSelectedPlant('');
-        setSelectedPlantName('');
         setSelectedYear('');
         setSelectedMonth('');
         setPlantOutputs([]);
@@ -197,8 +195,6 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
                         value={selectedPlant}
                         onChange={(e) => {
                             setSelectedPlant(e.target.value);
-                            const selectedPlant = plants.find((plant) => plant.id === e.target.value);
-                            setSelectedPlantName(selectedPlant ? selectedPlant.name : '');
                         }}>
                         <option value="">-- Chọn cây --</option>
                         {Array.isArray(plants) &&
@@ -243,7 +239,7 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
             {showNotification && (
                 <div className={styles.notification}>Hiện tại không có dữ liệu cho bộ lọc hiện tại</div>
             )}
-            <Legend colors={colors} selectedPlantName={selectedPlantName} />
+            <Legend colors={colors} />
         </>
     );
 }
