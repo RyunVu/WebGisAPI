@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
 using WebGis.Core.Contracts;
 using WebGis.Core.Entities;
 using WebGis.Core.Queries;

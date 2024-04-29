@@ -12,7 +12,9 @@ namespace WebGis.WebAPI.Mapsters
 			config.NewConfig<District, DistrictDto>();
 			config.NewConfig<District, DistrictItem>();
 
-			config.NewConfig<Category, CategoryDto>();
+			config.NewConfig<Category, CategoryDto>()
+				.Map(dest => dest.PlantsCount,
+					src => src.Plants == null ? 0 : src.Plants.Count);
 			config.NewConfig<Category, CategoryItem>();
 
 			config.NewConfig<Commune, CommuneDto>()
