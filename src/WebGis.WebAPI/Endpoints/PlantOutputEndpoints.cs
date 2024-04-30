@@ -218,8 +218,24 @@ namespace WebGis.WebAPI.Endpoints
 			Guid id,
 			PlantOutputEditModel model,
 			IPlantOutputRepository plantOutputRepo,
+			IPlantRepository plantRepo,
+			ICommuneRepository communeRepo,
 			IMapper mapper)
 		{
+			var plant = await plantRepo.GetPlantByIdAsync(model.PlantId);
+			var commune = await communeRepo.GetCommuneByIdAsync(model.CommuneId);
+
+			if (plant == null || commune == null)
+			{
+				return Results.Ok(ApiResponse.Fail(
+					HttpStatusCode.NotFound,
+					$"Không tìm thấy thông tin cây trồng hoặc địa phương tương ứng"));
+			}
+
+			var outputName = $"{commune.Name} {plant.Name}";
+
+			var slug = outputName.GenerateSlug();
+
 			if (await plantOutputRepo.IsPlantOutputSlugExistedAsync(id, model.UrlSlug))
 			{
 				return Results.Ok(ApiResponse.Fail(
@@ -227,10 +243,11 @@ namespace WebGis.WebAPI.Endpoints
 					$"Slug {model.UrlSlug} đã được sử dụng"));
 			}
 
-			var PlantOutput = mapper.Map<PlantOutput>(model);
-			PlantOutput.Id = id;
+			var plantOutput = mapper.Map<PlantOutput>(model);
+			plantOutput.Id = id;
+			plantOutput.UrlSlug = slug;
 
-			return await plantOutputRepo.AddOrUpdatePlantOutputAsync(PlantOutput)
+			return await plantOutputRepo.AddOrUpdatePlantOutputAsync(plantOutput)
 				? Results.Ok(
 					ApiResponse.Success(
 						"Cập nhập thành công", HttpStatusCode.Created))
