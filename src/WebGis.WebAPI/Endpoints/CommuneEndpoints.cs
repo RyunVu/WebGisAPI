@@ -40,12 +40,20 @@ namespace WebGis.WebAPI.Endpoints
 				.Produces(400)
 				.Produces(409);
 
+			routeGroupBuilder.MapPost("/{id:Guid}", ToggleActivedCommune)
+				.WithName("ToggleActivedCommune")
+				.Produces<ApiResponse<string>>();
+
 			routeGroupBuilder.MapPut("/{id:Guid}", UpdateCommune)
 				.WithName("UpdateACommune")
 				.AddEndpointFilter<ValidatorFilter<CommuneEditModel>>()
 				.Produces(204)
 				.Produces(400)
 				.Produces(409);
+
+			routeGroupBuilder.MapDelete("/{id:Guid}", DeleteCommune)
+				.WithName("DeleteACommune")
+				.Produces<ApiResponse<string>>();
 		}
 
 		#region Get
@@ -130,6 +138,20 @@ namespace WebGis.WebAPI.Endpoints
 
 		#region Update
 
+		private static async Task<IResult> ToggleActivedCommune(
+			Guid id,
+			ICommuneRepository communeRepo)
+		{
+			return await communeRepo.ToggleActivedAsync(id)
+				? Results.Ok(
+					ApiResponse.Success(
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
+		}
+
+
 		private static async Task<IResult> UpdateCommune(
 			Guid id,
 			CommuneEditModel model,
@@ -157,5 +179,13 @@ namespace WebGis.WebAPI.Endpoints
 		}
 
 		#endregion
+
+		private static async Task<IResult> DeleteCommune(Guid id,
+		   ICommuneRepository communeRepo)
+		{
+			return await communeRepo.DeleteCommuneByIdAsync(id)
+					? Results.Ok(ApiResponse.Success("Xã đã được xóa", HttpStatusCode.NoContent))
+					: Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy xã với id: `{id}`"));
+		}
 	}
 }
