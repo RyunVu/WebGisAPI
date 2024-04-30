@@ -86,10 +86,29 @@ namespace WebGis.Services.Gis
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
+		public async Task<bool> ToggleActivedAsync(
+			Guid id,
+			CancellationToken cancellationToken = default)
+		{
+			var plant = await GetPlantByIdAsync(id);
+
+			if (plant != null)
+			{
+				plant.Actived = !plant.Actived;
+				await _dbContext.SaveChangesAsync(cancellationToken);
+				return true;
+			}
+
+			return false;
+		}
+
 		public async Task<bool> AddOrUpdatePlantAsync(
 			Plant plant, 
 			CancellationToken cancellationToken = default)
 		{
+			var slug = plant.Name.GenerateSlug();
+			plant.UrlSlug = slug;
+
 			if (plant.Id != Guid.Empty)
 			{
 				_dbContext.Set<Plant>().Update(plant);
