@@ -111,7 +111,8 @@ namespace WebGis.WebAPI.Endpoints
 			ICategoryRepository CategoryRepo,
 			IMapper mapper)
 		{
-			var slug = model.Name.GenerateSlug();
+			//var slug = model.Name.GenerateSlug();
+			//Category.UrlSlug = slug;
 			if (await CategoryRepo
 				.IsCategorySlugExistedAsync(Guid.Empty, model.UrlSlug))
 			{
@@ -120,7 +121,6 @@ namespace WebGis.WebAPI.Endpoints
 			}
 
 			var Category = mapper.Map<Category>(model);
-			Category.UrlSlug = slug;
 			var result = await CategoryRepo.AddOrUpdateCategoryAsync(Category);
 
 
