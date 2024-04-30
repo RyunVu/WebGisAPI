@@ -87,10 +87,29 @@ namespace WebGis.Services.Gis
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
+		public async Task<bool> ToggleActivedAsync(
+			Guid id,
+			CancellationToken cancellationToken = default)
+		{
+			var district = await GetDistrictByIdAsync(id);
+
+			if (district != null)
+			{
+				district.Actived = !district.Actived;
+				await _dbContext.SaveChangesAsync(cancellationToken);
+				return true;
+			}
+
+			return false;
+		}
+
 		public async Task<bool> AddOrUpdateDistrictAsync(
 			District district, 
 			CancellationToken cancellationToken = default)
 		{
+			var slug = district.Name.GenerateSlug();
+			district.UrlSlug = slug;
+
 			if (district.Id != Guid.Empty)
 			{
 				_dbContext.Set<District>().Update(district);
@@ -104,13 +123,13 @@ namespace WebGis.Services.Gis
 				.SaveChangesAsync(cancellationToken) > 0;
 		}
 
-		//public async Task<bool> DeleteDistrictByIdAsync(
-		//	Guid id, 
-		//	CancellationToken cancellationToken = default)
-		//{
-		//	return await _dbContext.Set<District>()
-		//		.Where(a => a.Id.Equals(id))
-		//		.ExecuteDeleteAsync(cancellationToken) > 0;
-		//}
+		public async Task<bool> DeleteDistrictByIdAsync(
+			Guid id,
+			CancellationToken cancellationToken = default)
+		{
+			return await _dbContext.Set<District>()
+				.Where(a => a.Id.Equals(id))
+				.ExecuteDeleteAsync(cancellationToken) > 0;
+		}
 	}
 }

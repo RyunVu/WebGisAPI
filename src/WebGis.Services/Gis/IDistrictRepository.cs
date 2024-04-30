@@ -32,12 +32,16 @@ namespace WebGis.Services.Gis
 			string slug,
 			CancellationToken cancellationToken = default);
 
+		Task<bool> ToggleActivedAsync(
+			Guid id,
+			CancellationToken cancellationToken = default);
+
 		Task<bool> AddOrUpdateDistrictAsync(
 			District district,
 			CancellationToken cancellationToken = default);
 
-		//Task<bool> DeleteDistrictByIdAsync(
-		//	Guid id,
-		//	CancellationToken cancellationToken = default);
+		Task<bool> DeleteDistrictByIdAsync(
+			Guid id,
+			CancellationToken cancellationToken = default);
 	}
 }
