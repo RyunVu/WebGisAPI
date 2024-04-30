@@ -88,10 +88,29 @@ namespace WebGis.Services.Gis
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
+		public async Task<bool> ToggleActivedAsync(
+			Guid id,
+			CancellationToken cancellationToken = default)
+		{
+			var commune = await GetCommuneByIdAsync(id);
+
+			if (commune != null)
+			{
+				commune.Actived = !commune.Actived;
+				await _dbContext.SaveChangesAsync(cancellationToken);
+				return true;
+			}
+
+			return false;
+		}
+
 		public async Task<bool> AddOrUpdateCommuneAsync(
 			Commune commune,
 			CancellationToken cancellationToken = default)
 		{
+			var slug = commune.Name.GenerateSlug();
+			commune.UrlSlug = slug;
+
 			if (commune.Id != Guid.Empty)
 			{
 				_dbContext.Set<Commune>().Update(commune);
