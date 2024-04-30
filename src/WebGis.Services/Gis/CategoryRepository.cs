@@ -113,10 +113,11 @@ namespace WebGis.Services.Gis
 			Category category, 
 			CancellationToken cancellationToken = default)
 		{
+			var slug = category.Name.GenerateSlug();
+			category.UrlSlug = slug;
+
 			if (category.Id != Guid.Empty)
 			{
-				var slug = category.Name.GenerateSlug();
-				category.UrlSlug = slug;
 				_dbContext.Set<Category>().Update(category);
 			}
 			else
