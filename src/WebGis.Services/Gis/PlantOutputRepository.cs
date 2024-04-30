@@ -143,6 +143,22 @@ namespace WebGis.Services.Gis
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
+		public async Task<bool> ToggleActivedAsync(
+			Guid id,
+			CancellationToken cancellationToken = default)
+		{
+			var plantOutput = await GetPlantOutputByIdAsync(id);
+
+			if (plantOutput != null)
+			{
+				plantOutput.Actived = !plantOutput.Actived;
+				await _dbContext.SaveChangesAsync(cancellationToken);
+				return true;
+			}
+
+			return false;
+		}
+
 		public async Task<IList<PlantOutput>> GetPlantOutputByCommuneId(
 			Guid communeId,
 			CancellationToken cancellationToken = default)
