@@ -75,7 +75,8 @@ export default function Sidebar({ commune, plantOutputs, isVisible }) {
                                         {sortPlantOutputs(plantOutputs.items).groupedOutputs[group].map(
                                             (output, idx) => (
                                                 <li key={idx}>
-                                                    <strong>{output.plant.name}</strong>: {output.quantity}
+                                                    <strong>{output.plant.name}</strong>: {output.quantity}{' '}
+                                                    {output.unit}
                                                 </li>
                                             ),
                                         )}
