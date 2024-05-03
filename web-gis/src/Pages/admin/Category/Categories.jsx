@@ -111,12 +111,26 @@ export default function Categories() {
                                             <td>
                                                 <Link
                                                     to={`/admin/categories/edit/${category.id}`}
-                                                    className="text-bold">
+                                                    className="text-bold"
+                                                    style={{
+                                                        maxWidth: '150px',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                    }}>
                                                     {category.name}
                                                 </Link>
                                             </td>
                                             <td>{category.plantsCount}</td>
-                                            <td>{category.description}</td>
+                                            <td
+                                                style={{
+                                                    maxWidth: '200px',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap',
+                                                }}>
+                                                {category.description}
+                                            </td>
                                             <td>
                                                 <button
                                                     type="button"
