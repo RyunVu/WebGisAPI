@@ -11,6 +11,9 @@ namespace WebGis.WebAPI.Validations
 				.NotEmpty()
 				.WithMessage("Quantity is not empty");
 
+			RuleFor(x => x.Unit)
+				.NotEmpty()
+				.WithMessage("Unit is not empty");
 
 
 		}
