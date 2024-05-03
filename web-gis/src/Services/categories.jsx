@@ -17,9 +17,6 @@ export async function getCategoriesByQueries(queries) {
 export async function getCategoryById(id) {
     try {
         const { data } = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/category/${id}`);
-
-        console.log(data);
-
         if (data.isSuccess) return data.result;
         else return null;
     } catch (error) {
