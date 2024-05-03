@@ -20,6 +20,10 @@ namespace WebGis.Data.Mappings
 					.IsRequired()
 					.HasMaxLength(100);
 
+			builder.Property(a => a.Unit)
+					.IsRequired()
+					.HasMaxLength(100);
+
 			builder.Property(a => a.Time)
 							  .HasColumnType("datetime2")  
 							  .IsRequired();
