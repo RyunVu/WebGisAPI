@@ -21,8 +21,12 @@ namespace WebGis.Services.Gis
 			DistrictQuery query)
 		{
 			return _dbContext.Set<District>()
-				.WhereIf(!string.IsNullOrEmpty(query.Keyword),
-				a => a.Name.Contains(query.Keyword));
+				.WhereIf(!string.IsNullOrEmpty(query.Keyword), a =>
+				a.Name.Contains(query.Keyword) ||
+				a.Description.Contains(query.Keyword) ||
+				a.UrlSlug.Contains(query.Keyword))
+				.WhereIf(query.Actived.HasValue, a =>
+				a.Actived == query.Actived);
 		}
 
         public async Task<IPagedList<T>> GetPagedDistrictAsync<T>(

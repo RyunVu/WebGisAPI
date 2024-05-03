@@ -103,6 +103,7 @@ namespace WebGis.WebAPI.Endpoints
 					: Results.Ok(ApiResponse.Fail(
 						HttpStatusCode.NotFound, $"Không tìm thấy phân loại với mã định danh: `{slug}`"));
 		}
+
 		private static async Task<IResult> GetPlantOutputsWithCommuneId(
 			Guid communeId,
 			[AsParameters] PagingModel pagingModel,

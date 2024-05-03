@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import { decode, isInteger } from '../../../Utils/utils';
+import { decode } from '../../../Utils/utils';
 
 import { createCategory, getCategoryById, updateCategory } from '../../../Services/categories';
 

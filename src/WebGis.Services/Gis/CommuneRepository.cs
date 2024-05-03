@@ -21,8 +21,12 @@ namespace WebGis.Services.Gis
 			CommuneQuery query)
 		{
 			return _dbContext.Set<Commune>()
-				.WhereIf(!string.IsNullOrEmpty(query.Keyword),
-				a => a.Name.Contains(query.Keyword));
+				.WhereIf(!string.IsNullOrEmpty(query.Keyword), a =>
+				a.Name.Contains(query.Keyword) ||
+				a.Description.Contains(query.Keyword) ||
+				a.UrlSlug.Contains(query.Keyword))
+				.WhereIf(query.Actived.HasValue, a =>
+				a.Actived == query.Actived);
 		}
 
 
