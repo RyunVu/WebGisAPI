@@ -153,6 +153,9 @@ namespace WebGis.Data.Migrations
                     b.Property<DateTime>("Time")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Unit")
+                        .HasColumnType("text");
+
                     b.Property<string>("UrlSlug")
                         .HasColumnType("text");
 
