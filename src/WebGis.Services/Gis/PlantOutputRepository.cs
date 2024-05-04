@@ -20,11 +20,16 @@ namespace WebGis.Services.Gis
 			PlantOutputQuery query)
 		{
 			return _dbContext.Set<PlantOutput>()
+				.Include(p => p.Plant)
+				.Include(c => c.Commune)
 				.WhereIf(!string.IsNullOrEmpty(query.Keyword),
 				a => a.Plant.Name.Contains(query.Keyword) ||
 				a.Commune.Name.Contains(query.Keyword))
 				.WhereIf(query.Month > 0, m => m.Time.Month == query.Month)
-				.WhereIf(query.Year > 0, m => m.Time.Year == query.Year);
+				.WhereIf(query.Year > 0, m => m.Time.Year == query.Year)
+				.WhereIf(query.PlantId.HasValue && query.PlantId != Guid.Empty, p => p.Plant.Id.Equals(query.PlantId))
+				.WhereIf(query.CommuneId.HasValue && query.CommuneId != Guid.Empty, p => p.Commune.Id.Equals(query.CommuneId));
+
 
 		}
 

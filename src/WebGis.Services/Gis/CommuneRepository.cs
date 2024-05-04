@@ -21,13 +21,16 @@ namespace WebGis.Services.Gis
 			CommuneQuery query)
 		{
 			return _dbContext.Set<Commune>()
+				.Include(d => d.District)
 				.WhereIf(!string.IsNullOrEmpty(query.Keyword), a =>
 				a.Name.Contains(query.Keyword) ||
 				a.Description.Contains(query.Keyword) ||
 				a.UrlSlug.Contains(query.Keyword) ||
 				a.District.Name.Contains(query.Keyword))
 				.WhereIf(query.Actived.HasValue, a =>
-				a.Actived == query.Actived);
+				a.Actived == query.Actived)
+				.WhereIf(query.DistrictId.HasValue && query.DistrictId.HasValue && query.DistrictId != Guid.Empty, p => p.District.Id.Equals(query.DistrictId));
+
 		}
 
 
@@ -72,6 +75,7 @@ namespace WebGis.Services.Gis
 			CancellationToken cancellationToken = default)
 		{
 			return await _dbContext.Set<Commune>()
+						.Include(d => d.District)
 						.Where(a => a.UrlSlug.Equals(slug))
 						.FirstOrDefaultAsync(cancellationToken);
 		}
