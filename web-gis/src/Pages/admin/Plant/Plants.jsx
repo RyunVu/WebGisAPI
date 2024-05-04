@@ -116,7 +116,7 @@ export default function Plants() {
                                         <tr key={plant.id}>
                                             <td>
                                                 <Link
-                                                    to={`/admin/categories/edit/${plant.id}`}
+                                                    to={`/admin/plants/edit/${plant.id}`}
                                                     className="text-bold"
                                                     style={{
                                                         maxWidth: '150px',
@@ -148,7 +148,7 @@ export default function Plants() {
                                     ) : (
                                         <tr key={plant.id}>
                                             <td>
-                                                <Link to={`/admin/categories/edit/${plant.id}`} className="text-bold">
+                                                <Link to={`/admin/plants/edit/${plant.id}`} className="text-bold">
                                                     {plant.name}
                                                 </Link>
                                             </td>
