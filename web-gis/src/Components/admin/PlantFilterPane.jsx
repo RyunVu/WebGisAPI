@@ -46,7 +46,7 @@ export default function PlantFilterPane({ setKeyword, setCategoryId, setActived,
             <Form.Group className="col-auto">
                 <Form.Label className="visually-hidden">Loại cây</Form.Label>
                 <Form.Select ref={categoryRef} title="Chủ đề" name="categoryId">
-                    <option value="">-- Chọn loại sản phẩm --</option>
+                    <option value="">-- Chọn loại cây --</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>
                             {category.name}
