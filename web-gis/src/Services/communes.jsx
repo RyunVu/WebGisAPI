@@ -14,6 +14,22 @@ export async function getCommunesByQueries(queries) {
     }
 }
 
+export async function getActivedCommunes() {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/commune?Actived=true`);
+
+        if (response.data && response.data.isSuccess) {
+            // console.log(response.data.result);
+            return response.data.result;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return null;
+    }
+}
+
 export async function getCommuneById(id) {
     try {
         const { data } = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/commune/${id}`);
