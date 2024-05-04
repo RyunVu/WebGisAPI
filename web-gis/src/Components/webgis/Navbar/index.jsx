@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPlants } from '../../../Services/plants';
+import { getActivedPlants } from '../../../Services/plants';
 import { getPlantOutputsWithPlantIdAndDate } from '../../../Services/plantoutputs';
 import Legend from '../Legend';
 
@@ -106,7 +106,7 @@ export default function Navbar({ setPlantId, setYear, setMonth, map }) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const plantsData = await getPlants();
+                const plantsData = await getActivedPlants();
                 if (plantsData && Array.isArray(plantsData.items)) {
                     setPlants(plantsData.items);
                 } else {
