@@ -67,7 +67,7 @@ export default function Plants() {
             categoryId && queries.append('CategoryId', categoryId);
 
             const data = await getPlantsByQueries(queries);
-            console.log(data);
+            // console.log(data);
             if (data) {
                 setPlants(data.items);
                 setMetadata(data.metadata);
