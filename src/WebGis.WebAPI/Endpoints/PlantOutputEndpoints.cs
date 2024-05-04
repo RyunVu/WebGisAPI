@@ -40,6 +40,10 @@ namespace WebGis.WebAPI.Endpoints
 				.Produces(400)
 				.Produces(409);
 
+			routeGroupBuilder.MapPost("/{id:Guid}", ToggleActivedPlantOutput)
+				.WithName("ToggleActivedPlantOutput")
+				.Produces<ApiResponse<string>>();
+
 			routeGroupBuilder.MapPut("/{id:Guid}", UpdatePlantOutput)
 				.WithName("UpdateAPlantOutput")
 				.AddEndpointFilter<ValidatorFilter<PlantOutputEditModel>>()
@@ -197,7 +201,7 @@ namespace WebGis.WebAPI.Endpoints
 			
 			var plantOutput = mapper.Map<PlantOutput>(model);
 			plantOutput.UrlSlug = slug;
-			plantOutput.Time = DateTime.UtcNow;
+			plantOutput.Time = model.Time.ToUniversalTime();
 			var result = await plantOutputRepo.AddOrUpdatePlantOutputAsync(plantOutput);
 
 
@@ -214,6 +218,18 @@ namespace WebGis.WebAPI.Endpoints
 		#endregion
 
 		#region Update
+		private static async Task<IResult> ToggleActivedPlantOutput(
+			Guid id,
+			IPlantOutputRepository plantOutputRepo)
+		{
+			return await plantOutputRepo.ToggleActivedAsync(id)
+				? Results.Ok(
+					ApiResponse.Success(
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
+		}
 
 		private static async Task<IResult> UpdatePlantOutput(
 			Guid id,
@@ -230,23 +246,17 @@ namespace WebGis.WebAPI.Endpoints
 			{
 				return Results.Ok(ApiResponse.Fail(
 					HttpStatusCode.NotFound,
-					$"Không tìm thấy thông tin cây trồng hoặc địa phương tương ứng"));
+					$"Không tìm thấy thông tin cây trồng hoặc địa phương tương ứng" + plant + commune));
 			}
 
 			var outputName = $"{commune.Name} {plant.Name}";
 
 			var slug = outputName.GenerateSlug();
 
-			if (await plantOutputRepo.IsPlantOutputSlugExistedAsync(id, model.UrlSlug))
-			{
-				return Results.Ok(ApiResponse.Fail(
-					HttpStatusCode.Conflict,
-					$"Slug {model.UrlSlug} đã được sử dụng"));
-			}
-
 			var plantOutput = mapper.Map<PlantOutput>(model);
 			plantOutput.Id = id;
 			plantOutput.UrlSlug = slug;
+			plantOutput.Time = model.Time.ToUniversalTime();
 
 			return await plantOutputRepo.AddOrUpdatePlantOutputAsync(plantOutput)
 				? Results.Ok(
