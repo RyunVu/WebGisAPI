@@ -14,6 +14,22 @@ export async function getCategoriesByQueries(queries) {
     }
 }
 
+export async function getActivedCategories() {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/category?Actived=true`);
+
+        if (response.data && response.data.isSuccess) {
+            console.log(response.data.result);
+            return response.data.result;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return null;
+    }
+}
+
 export async function getCategoryById(id) {
     try {
         const { data } = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/category/${id}`);
