@@ -12,7 +12,7 @@ export default function PlantEdit() {
     const navigate = useNavigate();
 
     const initialState = {
-        id: 0,
+        id: '',
         name: '',
         urlSlug: '',
         description: '',
@@ -33,13 +33,20 @@ export default function PlantEdit() {
             e.stopPropagation();
             setValidated(true);
         } else {
+            console.log(plant);
             let isSuccess = true;
             if (id) {
-                const data = await updatePlant(id, plant);
+                const plantData = {
+                    id,
+                    name: plant.name,
+                    description: plant.description,
+                    categoryId: plant.category.id,
+                };
+                const data = await updatePlant(id, plantData);
                 if (data && !data.isSuccess) isSuccess = false;
             } else {
                 const data = await createPlant(plant);
-                if (!data.isSuccess) isSuccess = false;
+                if (data && !data.isSuccess) isSuccess = false;
             }
             if (isSuccess) alert('Đã lưu thành công!');
             else alert('Đã xảy ra lỗi!');
@@ -88,14 +95,14 @@ export default function PlantEdit() {
                         <Form.Control
                             type="text"
                             name="name"
-                            required
                             value={plant.name || ''}
-                            onChange={(e) =>
-                                setPlant({
-                                    ...plant,
-                                    name: e.target.value,
-                                })
-                            }
+                            onChange={(e) => {
+                                const newName = e.target.value;
+                                setPlant((prevPlant) => ({
+                                    ...prevPlant,
+                                    name: newName,
+                                }));
+                            }}
                         />
                         <Form.Control.Feedback type="invalid">Không được bỏ trống</Form.Control.Feedback>
                     </div>
@@ -110,12 +117,13 @@ export default function PlantEdit() {
                             name="description"
                             title="description"
                             value={decode(plant.description || '')}
-                            onChange={(e) =>
-                                setPlant({
-                                    ...plant,
-                                    description: e.target.value,
-                                })
-                            }
+                            onChange={(e) => {
+                                const newDescription = e.target.value;
+                                setPlant((prevPlant) => ({
+                                    ...prevPlant,
+                                    description: newDescription,
+                                }));
+                            }}
                         />
                     </div>
                 </div>
@@ -126,14 +134,23 @@ export default function PlantEdit() {
                         <Form.Select
                             name="categoryId"
                             title="Category Id"
-                            value={plant.categoryId ? plant.categoryId : plant.category.id}
-                            required
-                            onChange={(e) =>
-                                setPlant({
-                                    ...plant,
-                                    categoryId: e.target.value,
-                                })
-                            }>
+                            value={plant.category?.id || ''}
+                            onChange={(e) => {
+                                const selectedCategoryId = e.target.value;
+                                setPlant((prevPlant) => {
+                                    return {
+                                        ...prevPlant,
+                                        categoryId:
+                                            selectedCategoryId !== '' ? selectedCategoryId : prevPlant.categoryId,
+                                        category: {
+                                            id:
+                                                selectedCategoryId !== ''
+                                                    ? selectedCategoryId
+                                                    : prevPlant.category?.id || '',
+                                        },
+                                    };
+                                });
+                            }}>
                             <option value="">-- Chọn loại cây --</option>
                             {categories.length > 0 &&
                                 categories.map((category) => (
