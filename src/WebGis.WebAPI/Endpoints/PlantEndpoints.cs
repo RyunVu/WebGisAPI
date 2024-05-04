@@ -43,7 +43,7 @@ namespace WebGis.WebAPI.Endpoints
 				.WithName("ToggleActivedPlant")
 				.Produces<ApiResponse<string>>();
 
-			routeGroupBuilder.MapPut("/{id:int}", UpdatePlant)
+			routeGroupBuilder.MapPut("/{id:Guid}", UpdatePlant)
 				.WithName("UpdateAPlant")
 				.AddEndpointFilter<ValidatorFilter<PlantEditModel>>()
 				.Produces(204)
