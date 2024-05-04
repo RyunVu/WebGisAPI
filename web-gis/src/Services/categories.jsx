@@ -19,7 +19,7 @@ export async function getActivedCategories() {
         const response = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/category?Actived=true`);
 
         if (response.data && response.data.isSuccess) {
-            console.log(response.data.result);
+            // console.log(response.data.result);
             return response.data.result;
         } else {
             return null;
