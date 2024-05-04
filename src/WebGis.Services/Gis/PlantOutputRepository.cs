@@ -27,12 +27,13 @@ namespace WebGis.Services.Gis
 				a.Commune.Name.Contains(query.Keyword))
 				.WhereIf(query.Month > 0, m => m.Time.Month == query.Month)
 				.WhereIf(query.Year > 0, m => m.Time.Year == query.Year)
+				.WhereIf(query.Actived.HasValue, a =>
+				a.Actived == query.Actived)
 				.WhereIf(query.PlantId.HasValue && query.PlantId != Guid.Empty, p => p.Plant.Id.Equals(query.PlantId))
 				.WhereIf(query.CommuneId.HasValue && query.CommuneId != Guid.Empty, p => p.Commune.Id.Equals(query.CommuneId));
 
 
 		}
-
 
 		public async Task<IPagedList<T>> GetPagedPlantOutputAsync<T>(
 			PlantOutputQuery query,
@@ -126,6 +127,8 @@ namespace WebGis.Services.Gis
 			CancellationToken cancellationToken = default)
 		{
 			return await _dbContext.Set<PlantOutput>()
+						.Include(p => p.Plant)
+						.Include(c => c.Commune)
 						.Where(a => a.UrlSlug.Equals(slug))
 						.FirstOrDefaultAsync(cancellationToken);
 		}
