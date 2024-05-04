@@ -11,7 +11,7 @@ export default function CategoryEdit() {
     const navigate = useNavigate();
 
     const initialState = {
-        id: 0,
+        id: '',
         name: '',
         urlSlug: '',
         description: '',

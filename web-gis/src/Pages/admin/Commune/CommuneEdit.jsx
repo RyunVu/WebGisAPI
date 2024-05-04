@@ -12,7 +12,7 @@ export default function CommuneEdit() {
     const navigate = useNavigate();
 
     const initialState = {
-        id: 0,
+        id: '',
         name: '',
         urlSlug: '',
         description: '',
@@ -126,8 +126,7 @@ export default function CommuneEdit() {
                     <Form.Label className="col-sm-2 col-form-label">Diện tích</Form.Label>
                     <div className="col-sm-10">
                         <Form.Control
-                            as="textarea"
-                            type="text"
+                            type="number"
                             name="area"
                             title="area"
                             value={commune.area || ''}
