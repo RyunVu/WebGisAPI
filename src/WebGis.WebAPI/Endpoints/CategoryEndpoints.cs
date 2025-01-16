@@ -38,6 +38,10 @@ namespace WebGis.WebAPI.Endpoints
 				.AddEndpointFilter<ValidatorFilter<CategoryEditModel>>()
 				.Produces<ApiResponse<CategoryDto>>();
 
+			routeGroupBuilder.MapPost("/{id:Guid}", ToggleActivedCategory)
+				.WithName("ToggleActivedCategory")
+				.Produces<ApiResponse<string>>();
+
 			routeGroupBuilder.MapPut("/{id:Guid}", UpdateCategory)
 				.WithName("UpdateACategory")
 				.AddEndpointFilter<ValidatorFilter<CategoryEditModel>>()
@@ -107,7 +111,8 @@ namespace WebGis.WebAPI.Endpoints
 			ICategoryRepository CategoryRepo,
 			IMapper mapper)
 		{
-			var slug = model.Name.GenerateSlug();
+			//var slug = model.Name.GenerateSlug();
+			//Category.UrlSlug = slug;
 			if (await CategoryRepo
 				.IsCategorySlugExistedAsync(Guid.Empty, model.UrlSlug))
 			{
@@ -116,7 +121,6 @@ namespace WebGis.WebAPI.Endpoints
 			}
 
 			var Category = mapper.Map<Category>(model);
-			Category.UrlSlug = slug;
 			var result = await CategoryRepo.AddOrUpdateCategoryAsync(Category);
 
 
@@ -133,13 +137,26 @@ namespace WebGis.WebAPI.Endpoints
 
 		#region Update
 
+		private static async Task<IResult> ToggleActivedCategory(
+			Guid id,
+			ICategoryRepository categoryRepo)
+		{
+			return await categoryRepo.ToggleActivedAsync(id)
+				? Results.Ok(
+					ApiResponse.Success(
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
+		}
+
 		private static async Task<IResult> UpdateCategory(
 			Guid id,
 			CategoryEditModel model,
-			ICategoryRepository CategoryRepo,
+			ICategoryRepository categoryRepo,
 			IMapper mapper)
 		{
-			if (await CategoryRepo.IsCategorySlugExistedAsync(id, model.UrlSlug))
+			if (await categoryRepo.IsCategorySlugExistedAsync(id, model.UrlSlug))
 			{
 				return Results.Ok(ApiResponse.Fail(
 					HttpStatusCode.Conflict,
@@ -149,7 +166,7 @@ namespace WebGis.WebAPI.Endpoints
 			var Category = mapper.Map<Category>(model);
 			Category.Id = id;
 
-			return await CategoryRepo.AddOrUpdateCategoryAsync(Category)
+			return await categoryRepo.AddOrUpdateCategoryAsync(Category)
 				? Results.Ok(
 					ApiResponse.Success(
 						"Cập nhập thành công", HttpStatusCode.Created))

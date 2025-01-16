@@ -21,8 +21,16 @@ namespace WebGis.Services.Gis
 			CommuneQuery query)
 		{
 			return _dbContext.Set<Commune>()
-				.WhereIf(!string.IsNullOrEmpty(query.Keyword),
-				a => a.Name.Contains(query.Keyword));
+				.Include(d => d.District)
+				.WhereIf(!string.IsNullOrEmpty(query.Keyword), a =>
+				a.Name.Contains(query.Keyword) ||
+				a.Description.Contains(query.Keyword) ||
+				a.UrlSlug.Contains(query.Keyword) ||
+				a.District.Name.Contains(query.Keyword))
+				.WhereIf(query.Actived.HasValue, a =>
+				a.Actived == query.Actived)
+				.WhereIf(query.DistrictId.HasValue && query.DistrictId.HasValue && query.DistrictId != Guid.Empty, p => p.District.Id.Equals(query.DistrictId));
+
 		}
 
 
@@ -53,6 +61,7 @@ namespace WebGis.Services.Gis
 			if (includeDetail)
 			{
 				return await _dbContext.Set<Commune>()
+					.Include(d => d.District)
 					.Where(d => d.Id.Equals(id))
 					.FirstOrDefaultAsync(cancellationToken);
 			}
@@ -66,6 +75,7 @@ namespace WebGis.Services.Gis
 			CancellationToken cancellationToken = default)
 		{
 			return await _dbContext.Set<Commune>()
+						.Include(d => d.District)
 						.Where(a => a.UrlSlug.Equals(slug))
 						.FirstOrDefaultAsync(cancellationToken);
 		}
@@ -88,10 +98,29 @@ namespace WebGis.Services.Gis
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
+		public async Task<bool> ToggleActivedAsync(
+			Guid id,
+			CancellationToken cancellationToken = default)
+		{
+			var commune = await GetCommuneByIdAsync(id);
+
+			if (commune != null)
+			{
+				commune.Actived = !commune.Actived;
+				await _dbContext.SaveChangesAsync(cancellationToken);
+				return true;
+			}
+
+			return false;
+		}
+
 		public async Task<bool> AddOrUpdateCommuneAsync(
 			Commune commune,
 			CancellationToken cancellationToken = default)
 		{
+			var slug = commune.Name.GenerateSlug();
+			commune.UrlSlug = slug;
+
 			if (commune.Id != Guid.Empty)
 			{
 				_dbContext.Set<Commune>().Update(commune);
@@ -113,5 +142,6 @@ namespace WebGis.Services.Gis
 				.Where(c => c.Id.Equals(id))
 				.ExecuteDeleteAsync(cancellationToken) > 0;
 		}
+
 	}
 }

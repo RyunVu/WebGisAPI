@@ -20,9 +20,17 @@ namespace WebGis.Services.Gis
 			PlantQuery query)
 		{
 			return _dbContext.Set<Plant>()
-				.WhereIf(!string.IsNullOrEmpty(query.Keyword),
-				a => a.Name.Contains(query.Keyword));
+				.Include(c => c.Category)
+				.WhereIf(!string.IsNullOrEmpty(query.Keyword), a =>
+				a.Name.Contains(query.Keyword) ||
+				a.Description.Contains(query.Keyword) ||
+				a.UrlSlug.Contains(query.Keyword))
+				.WhereIf(query.Actived.HasValue, a =>
+				a.Actived == query.Actived)
+				.WhereIf(query.CategoryId.HasValue && query.CategoryId != Guid.Empty, p => p.Category.Id.Equals(query.CategoryId));
 		}
+
+		//.WhereIf(productQuery.CategoryId > 0, s=> s.Category.Id.Equals(productQuery.CategoryId))
 
 		public async Task<IPagedList<T>> GetPagedPlantAsync<T>(
 			PlantQuery query, 
@@ -51,6 +59,7 @@ namespace WebGis.Services.Gis
 			if (includeDetail)
 			{
 				return await _dbContext.Set<Plant>()
+					.Include(c => c.Category)
 					.Where(d => d.Id.Equals(id))
 					.FirstOrDefaultAsync(cancellationToken);
 			}
@@ -64,6 +73,7 @@ namespace WebGis.Services.Gis
 			CancellationToken cancellationToken = default)
 		{
 			return await _dbContext.Set<Plant>()
+						.Include(c => c.Category)
 						.Where(a => a.UrlSlug.Equals(slug))
 						.FirstOrDefaultAsync(cancellationToken);
 		}
@@ -86,10 +96,29 @@ namespace WebGis.Services.Gis
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
+		public async Task<bool> ToggleActivedAsync(
+			Guid id,
+			CancellationToken cancellationToken = default)
+		{
+			var plant = await GetPlantByIdAsync(id);
+
+			if (plant != null)
+			{
+				plant.Actived = !plant.Actived;
+				await _dbContext.SaveChangesAsync(cancellationToken);
+				return true;
+			}
+
+			return false;
+		}
+
 		public async Task<bool> AddOrUpdatePlantAsync(
 			Plant plant, 
 			CancellationToken cancellationToken = default)
 		{
+			var slug = plant.Name.GenerateSlug();
+			plant.UrlSlug = slug;
+
 			if (plant.Id != Guid.Empty)
 			{
 				_dbContext.Set<Plant>().Update(plant);

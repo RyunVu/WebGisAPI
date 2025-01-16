@@ -1,0 +1,43 @@
+.legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.legendBox {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.legendTitle {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.legendList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.legendItem {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.colorBox {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 3px;
+}
+
+.legendLabel {
+    padding: 0 20px;
+}

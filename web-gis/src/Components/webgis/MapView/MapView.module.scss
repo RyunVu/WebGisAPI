@@ -1,0 +1,88 @@
+.mapContainer {
+    position: relative;
+    width: '100vw';
+    height: '95vh';
+    overflow: hidden;
+}
+
+// .sidebar {
+//     width: 0;
+//     height: 95vh;
+//     background-color: #f0f0f0;
+//     position: absolute;
+//     top: 10vh;
+//     right: 0;
+//     transition: width 0.3s ease;
+//     overflow: hidden;
+// }
+
+// .sidebar.visible {
+//     width: 20vw;
+// }
+
+.mousePosition {
+    position: fixed;
+    top: auto;
+    right: auto;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid grey;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: rgba(225, 225, 225, 0.6);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+}
+
+.ol-control {
+    display: none;
+}
+
+.olPopup {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    bottom: 12px;
+    left: -50px;
+    min-width: 200px;
+
+    &:after,
+    &:before {
+        top: 100%;
+        border: solid transparent;
+        content: ' ';
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    &:after {
+        border-top-color: white;
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+    }
+
+    &:before {
+        border-top-color: #cccccc;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+    }
+}
+
+.olPopupCloser {
+    text-decoration: none;
+    position: absolute;
+    top: 2px;
+    right: 8px;
+
+    &:after {
+        content: 'X';
+    }
+}

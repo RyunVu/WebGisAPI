@@ -98,6 +98,7 @@ namespace WebGis.Data.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     UrlSlug = table.Column<string>(type: "text", nullable: true),
+                    Unit = table.Column<string>(type: "text", nullable: true),
                     Time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Actived = table.Column<bool>(type: "boolean", nullable: false),
                     PlantId = table.Column<Guid>(type: "uuid", nullable: false),

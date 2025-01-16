@@ -1,0 +1,10 @@
+export { default as AdminHome } from './Dashboard/Dashboard';
+export { default as AdminLayout } from './Layout/Layout';
+export { default as Communes } from './Commune/Communes';
+export { default as CommuneEdit } from './Commune/CommuneEdit';
+export { default as Categories } from './Category/Categories';
+export { default as CategoryEdit } from './Category/CategoryEdit';
+export { default as Plants } from './Plant/Plants';
+export { default as PlantEdit } from './Plant/PlantEdit';
+export { default as PlantOutputs } from './PlantOutput/PlantOutputs';
+export { default as PlantOutputEdit } from './PlantOutput/PlantOutputEdit';

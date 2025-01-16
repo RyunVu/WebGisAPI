@@ -21,8 +21,13 @@ namespace WebGis.Services.Gis
 			CategoryQuery query)
 		{
 			return _dbContext.Set<Category>()
-				.WhereIf(!string.IsNullOrEmpty(query.Keyword),
-				a => a.Name.Contains(query.Keyword));
+				.WhereIf(!string.IsNullOrEmpty(query.Keyword), a =>
+				a.Name.Contains(query.Keyword) ||
+				a.Description.Contains(query.Keyword) ||
+				a.UrlSlug.Contains(query.Keyword))
+				.WhereIf(query.Actived.HasValue, a =>
+				a.Actived == query.Actived);
+
 		}
 
 
@@ -88,10 +93,29 @@ namespace WebGis.Services.Gis
 					&& a.UrlSlug.Equals(slug), cancellationToken);
 		}
 
+		public async Task<bool> ToggleActivedAsync(
+			Guid id, 
+			CancellationToken cancellationToken = default)
+		{
+			var category = await GetCategoryByIdAsync(id);
+
+			if (category != null)
+			{
+				category.Actived = !category.Actived;
+				await _dbContext.SaveChangesAsync(cancellationToken);
+				return true;
+			}
+
+			return false;
+		}
+
 		public async Task<bool> AddOrUpdateCategoryAsync(
 			Category category, 
 			CancellationToken cancellationToken = default)
 		{
+			var slug = category.Name.GenerateSlug();
+			category.UrlSlug = slug;
+
 			if (category.Id != Guid.Empty)
 			{
 				_dbContext.Set<Category>().Update(category);
@@ -113,5 +137,6 @@ namespace WebGis.Services.Gis
 				.Where(c => c.Id.Equals(id))
 				.ExecuteDeleteAsync(cancellationToken) > 0;
 		}
+
 	}
 }

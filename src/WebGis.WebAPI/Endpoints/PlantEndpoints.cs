@@ -39,12 +39,20 @@ namespace WebGis.WebAPI.Endpoints
 				.Produces(400)
 				.Produces(409);
 
-			routeGroupBuilder.MapPut("/{id:int}", UpdatePlant)
+			routeGroupBuilder.MapPost("/{id:Guid}", ToggleActivedPlant)
+				.WithName("ToggleActivedPlant")
+				.Produces<ApiResponse<string>>();
+
+			routeGroupBuilder.MapPut("/{id:Guid}", UpdatePlant)
 				.WithName("UpdateAPlant")
 				.AddEndpointFilter<ValidatorFilter<PlantEditModel>>()
 				.Produces(204)
 				.Produces(400)
 				.Produces(409);
+
+			routeGroupBuilder.MapDelete("/{id:Guid}", DeletePlant)
+				.WithName("DeleteAPlant")
+				.Produces<ApiResponse<string>>();
 		}
 
 		#region Get
@@ -129,6 +137,19 @@ namespace WebGis.WebAPI.Endpoints
 
 		#region Update
 
+		private static async Task<IResult> ToggleActivedPlant(
+			Guid id,
+			IPlantRepository plantRepo)
+		{
+			return await plantRepo.ToggleActivedAsync(id)
+				? Results.Ok(
+					ApiResponse.Success(
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
+		}
+
 		private static async Task<IResult> UpdatePlant(
 			Guid id,
 			PlantEditModel model,
@@ -156,5 +177,14 @@ namespace WebGis.WebAPI.Endpoints
 		}
 
 		#endregion
+
+		private static async Task<IResult> DeletePlant(
+			Guid id,
+			IPlantRepository plantRepo)
+		{
+			return await plantRepo.DeletePlantByIdAsync(id)
+					? Results.Ok(ApiResponse.Success("Cây đã được xóa", HttpStatusCode.NoContent))
+					: Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy cây với id: `{id}`"));
+		}
 	}
 }

@@ -13,7 +13,7 @@ using WebGis.Data.Contexts;
 namespace WebGis.Data.Migrations
 {
     [DbContext(typeof(WebDbContext))]
-    [Migration("20240401074708_InitialCreate")]
+    [Migration("20240503091500_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -155,6 +155,9 @@ namespace WebGis.Data.Migrations
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("text");
 
                     b.Property<string>("UrlSlug")
                         .HasColumnType("text");

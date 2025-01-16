@@ -8,6 +8,7 @@
 		public string Description { get; set; }
 
 		public bool Actived { get; set; }
+		public int PlantsCount { get; set; }
 
 
 	}

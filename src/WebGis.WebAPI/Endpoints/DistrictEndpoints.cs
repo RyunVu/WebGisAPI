@@ -40,6 +40,10 @@ namespace WebGis.WebAPI.Endpoints
 				.Produces(400)
 				.Produces(409);
 
+			routeGroupBuilder.MapPost("/{id:Guid}", ToggleActivedDistrict)
+				.WithName("ToggleActivedDistrict")
+				.Produces<ApiResponse<string>>();
+
 			routeGroupBuilder.MapPut("/{id:Guid}", UpdateDistrict)
 				.WithName("UpdateADistrict")
 				.AddEndpointFilter<ValidatorFilter<DistrictEditModel>>()
@@ -47,6 +51,9 @@ namespace WebGis.WebAPI.Endpoints
 				.Produces(400)
 				.Produces(409);
 
+			routeGroupBuilder.MapDelete("/{id:Guid}", DeleteDistrict)
+				.WithName("DeleteADistrict")
+				.Produces<ApiResponse<string>>();
 		}
 
 		#region Get
@@ -131,6 +138,19 @@ namespace WebGis.WebAPI.Endpoints
 
 		#region Update
 
+		private static async Task<IResult> ToggleActivedDistrict(
+			Guid id,
+			IDistrictRepository districtRepo)
+		{
+			return await districtRepo.ToggleActivedAsync(id)
+				? Results.Ok(
+					ApiResponse.Success(
+						"Cập nhập thành công", HttpStatusCode.Created))
+				: Results.Ok(
+					ApiResponse.Fail(
+						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
+		}
+
 		private static async Task<IResult> UpdateDistrict(
 			Guid id,
 			DistrictEditModel model,
@@ -155,9 +175,16 @@ namespace WebGis.WebAPI.Endpoints
 					ApiResponse.Fail(
 						HttpStatusCode.Conflict, $"Đã có lỗi xảy ra"));
 
-		} 
+		}
 
 		#endregion
 
+		private static async Task<IResult> DeleteDistrict(Guid id,
+		   IDistrictRepository districtRepos)
+		{
+			return await districtRepos.DeleteDistrictByIdAsync(id)
+					? Results.Ok(ApiResponse.Success("Tỉnh đã được xóa", HttpStatusCode.NoContent))
+					: Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy tỉnh với id: `{id}`"));
+		}
 	}
 }

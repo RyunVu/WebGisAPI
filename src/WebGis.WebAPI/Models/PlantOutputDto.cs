@@ -6,6 +6,7 @@ namespace WebGis.WebAPI.Models
 	{
 		public Guid Id { get; set; }
 		public int Quantity { get; set; }
+		public string Unit { get; set; }
 		public string UrlSlug { get; set; }
 
 		private DateTime _time;
